@@ -1,0 +1,142 @@
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+import { usePathname } from "next/navigation";
+import HomesModal from "@/components/modals/HomesModal";
+import Context from "@/context/Context";
+import QuickView from "@/components/modals/QuickView";
+import ProductSidebar from "@/components/modals/ProductSidebar";
+import QuickAdd from "@/components/modals/QuickAdd";
+import Compare from "@/components/modals/Compare";
+import ShopCart from "@/components/modals/ShopCart";
+import AskQuestion from "@/components/modals/AskQuestion";
+import BlogSidebar from "@/components/modals/BlogSidebar";
+import ColorCompare from "@/components/modals/ColorCompare";
+import DeliveryReturn from "@/components/modals/DeliveryReturn";
+import FindSize from "@/components/modals/FindSize";
+import Login from "@/components/modals/Login";
+import Register from "@/components/modals/Register";
+import ResetPass from "@/components/modals/ResetPass";
+import SearchModal from "@/components/modals/SearchModal";
+import ToolbarBottom from "@/components/modals/ToolbarBottom";
+import ToolbarShop from "@/components/modals/ToolbarShop";
+import NewsletterModal from "@/components/modals/NewsletterModal";
+import ShareModal from "@/components/modals/ShareModal";
+import ScrollTop from "@/components/common/ScrollTop";
+import RtlToggle from "@/components/common/RtlToggle";
+
+export default function ClientLayout({ children }) {
+    const pathname = usePathname();
+    const lastScrollY = useRef(0);
+    const [scrollDirection, setScrollDirection] = useState("down");
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            import("bootstrap/dist/js/bootstrap.esm").then(() => { });
+        }
+    }, []);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const header = document.querySelector("header");
+            if (header) {
+                if (window.scrollY > 100) {
+                    header.classList.add("header-bg");
+                } else {
+                    header.classList.remove("header-bg");
+                }
+            }
+
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > 250) {
+                if (currentScrollY > lastScrollY.current) {
+                    setScrollDirection("down");
+                } else {
+                    setScrollDirection("up");
+                }
+            } else {
+                setScrollDirection("down");
+            }
+            lastScrollY.current = currentScrollY;
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    useEffect(() => {
+        const header = document.querySelector("header");
+        if (header) {
+            if (scrollDirection === "up") {
+                header.style.top = "0px";
+            } else {
+                header.style.top = "-185px";
+            }
+        }
+    }, [scrollDirection]);
+
+    useEffect(() => {
+        // Close any open modal/offcanvas on route change
+        const bootstrap = require("bootstrap");
+        const modalElements = document.querySelectorAll(".modal.show");
+        modalElements.forEach((modal) => {
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            if (modalInstance) modalInstance.hide();
+        });
+
+        const offcanvasElements = document.querySelectorAll(".offcanvas.show");
+        offcanvasElements.forEach((offcanvas) => {
+            const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvas);
+            if (offcanvasInstance) offcanvasInstance.hide();
+        });
+
+        // WOW Init
+        const WOW = require("@/utils/wow");
+        const wow = new WOW.default({ mobile: false, live: false });
+        wow.init();
+    }, [pathname]);
+
+    useEffect(() => {
+        const initializeDirection = () => {
+            const direction = localStorage.getItem("direction");
+            if (direction) {
+                const parsedDirection = JSON.parse(direction);
+                document.documentElement.dir = parsedDirection.dir;
+                document.body.classList.add(parsedDirection.dir);
+            } else {
+                document.documentElement.dir = "ltr";
+            }
+
+            const preloader = document.getElementById("preloader");
+            if (preloader) preloader.classList.add("disabled");
+        };
+        initializeDirection();
+    }, []);
+
+    return (
+        <Context>
+            <div id="wrapper">{children}</div>
+            <RtlToggle />
+            <HomesModal />
+            <QuickView />
+            <QuickAdd />
+            <ProductSidebar />
+            <Compare />
+            <ShopCart />
+            <AskQuestion />
+            <BlogSidebar />
+            <ColorCompare />
+            <DeliveryReturn />
+            <FindSize />
+            <Login />
+            <Register />
+            <ResetPass />
+            <SearchModal />
+            <ToolbarBottom />
+            <ToolbarShop />
+            <NewsletterModal />
+            <ShareModal />
+            <ScrollTop />
+        </Context>
+    );
+}

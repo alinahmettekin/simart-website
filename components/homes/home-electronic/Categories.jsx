@@ -1,0 +1,19 @@
+import React from "react";
+import CategoriesClient from "./CategoriesClient";
+
+export default function Categories({ categories = [] }) {
+  return (
+    <section className="flat-spacing-11 pb-0">
+      <div className="container">
+        <div className="position-relative">
+          <div className="flat-title flex-row justify-content-between px-0">
+            <span className="title wow fadeInUp" data-wow-delay="0s">
+              Kategoriler
+            </span>
+          </div>
+          <CategoriesClient categories={categories} />
+        </div>
+      </div>
+    </section>
+  );
+}
