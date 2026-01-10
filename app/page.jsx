@@ -11,28 +11,34 @@ import Hero from "@/components/homes/home-electronic/Hero";
 import Products from "@/components/homes/home-electronic/Products";
 import Testimonials from "@/components/homes/home-electronic/Testimonials";
 import React, { cache } from "react";
-import { getMenus, getCategories, getBanners } from "@/api/home";
+import { getCategories, getBanners, getCollectionBanner, getCollections } from "@/api/home";
+import { getMenus, getFooterMenus } from "@/api/menus";
+import { log } from "@/utils/logger";
 
 export const metadata = {
-  title: "Home Electronics  || Ecomus - Ultimate Nextjs Ecommerce Template",
-  description: "Ecomus - Ultimate Nextjs Ecommerce Template",
+  title: "Şımart Teknoloji - Robot Süpürge ve Akıllı Ev Sistemleri",
+  description: "Şımart Teknoloji, robot süpürgeler, akıllı ev sistemleri ve IoT çözümlerinde öncüdür. Ev otomasyonu ve yaşamı kolaylaştıran teknolojilerle hizmetinizdeyiz.",
 };
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  console.log("[Home] Starting parallel data fetch via API services...");
+  log("[Home] Starting parallel data fetch via API services...");
 
-  const [menuItems, categories, banners] = await Promise.all([
+  const [menuItems, categories, banners, footerMenus, collectionBanner, collections] = await Promise.all([
     getMenus(),
     getCategories(),
     getBanners(),
+    getFooterMenus(),
+    getCollectionBanner(),
+    getCollections(),
   ]);
 
-  console.log("[Home] Data fetch complete.", {
+  log("[Home] Data fetch complete.", {
     menuItemsCount: menuItems.length,
     categoriesCount: categories.length,
     bannersCount: banners.length,
+    hasFooterMenus: !!(footerMenus.yardim || footerMenus.hakkimizda),
   });
 
   return (
@@ -42,14 +48,14 @@ export default async function Home() {
         <Hero banners={banners} />
         {/* <Marquee /> */}
         <Categories categories={categories} />
-        <CollectionBanner />
-        <Collections />
-        <Countdown />
+        <CollectionBanner banner={collectionBanner} />
+        <Collections collections={collections} />
+        {/* <Countdown /> */}
         <Products />
         <Testimonials />
         <Blogs />
         <Features />
-        <Footer1 />
+        <Footer1 footerMenus={footerMenus} />
       </div>
     </>
   );

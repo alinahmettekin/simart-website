@@ -1,4 +1,5 @@
 import { serverFetch } from "@/utils/serverFetch";
+import { log} from "@/utils/logger";
 
 /**
  * Tüm ürünleri veya belirli filtredeki ürünleri getirir.
@@ -11,6 +12,6 @@ export async function getProducts(params = "") {
         return response.data || [];
     }
 
-    console.warn("[API products.js] getProducts failed:", response);
+    log("[API products.js] getProducts failed:", response);
     return [];
 }

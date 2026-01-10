@@ -5,8 +5,8 @@ import ClientLayout from "@/components/common/ClientLayout";
 import Topbar from "@/components/homes/home-headphone/Topbar";
 
 export const metadata = {
-  title: "Şımart Teknoloji",
-  description: "Şımart Teknoloji - Akıllı Ev Sistemleri",
+  title: "Şımart Teknoloji - Robot Süpürge ve Akıllı Ev Sistemleri",
+  description: "Şımart Teknoloji, robot süpürgeler, akıllı ev sistemleri ve IoT çözümlerinde öncüdür. Ev otomasyonu ve yaşamı kolaylaştıran teknolojilerle hizmetinizdeyiz.",
 };
 
 export default function RootLayout({ children }) {

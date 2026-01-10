@@ -1,9 +1,10 @@
 import { cookies } from "next/headers";
 import crypto from "crypto";
+import { log } from "./logger";
 
 const BACKEND_URL = "https://api.simart.cloud/api/v1";
 const MAX_RETRIES = 3;
-const RETRY_DELAY = 2000; // 2 saniye
+const RETRY_DELAY = 1250; // 2 saniye
 
 /**
  * Cloudflare challenge sayfası olup olmadığını kontrol eder
@@ -68,9 +69,9 @@ export async function serverFetch(endpoint, options = {}) {
         const method = options.method || "GET";
 
         if (attempt === 1) {
-            console.log(`[serverFetch] FETCH START: ${method} ${url}`);
+            log(`[serverFetch] FETCH START: ${method} ${url}`);
         } else {
-            console.log(`[serverFetch] RETRY ${attempt}/${retries}: ${method} ${url}`);
+            log(`[serverFetch] RETRY ${attempt}/${retries}: ${method} ${url}`);
         }
 
         try {
@@ -80,7 +81,7 @@ export async function serverFetch(endpoint, options = {}) {
             });
 
             const duration = Date.now() - startTime;
-            console.log(`[serverFetch] FETCH END: ${response.status} ${url} (${duration}ms)`);
+            log(`[serverFetch] FETCH END: ${response.status} ${url} (${duration}ms)`);
 
             // Response body'yi oku (hem başarılı hem başarısız durumlar için)
             let responseText = "";
@@ -93,16 +94,16 @@ export async function serverFetch(endpoint, options = {}) {
             // Cloudflare challenge kontrolü
             if (isCloudflareChallenge(responseText)) {
                 const isLastAttempt = attempt === retries;
-                console.warn(`[serverFetch] ⚠️  CLOUDFLARE CHALLENGE DETECTED! (Attempt ${attempt}/${retries})`);
+                log(`[serverFetch] ⚠️  CLOUDFLARE CHALLENGE DETECTED! (Attempt ${attempt}/${retries})`);
                 
                 if (isLastAttempt) {
-                    console.error("----------------------------------------------------------------");
-                    console.error(`[serverFetch] CLOUDFLARE CHALLENGE - All retries exhausted!`);
-                    console.error(`- URL: ${url}`);
-                    console.error(`- Status: ${response.status} ${response.statusText}`);
-                    console.error(`- This usually means Cloudflare is blocking the request`);
-                    console.error(`- Check: User-Agent, IP reputation, or API rate limits`);
-                    console.error("----------------------------------------------------------------");
+                    log("----------------------------------------------------------------");
+                    log(`[serverFetch] CLOUDFLARE CHALLENGE - All retries exhausted!`);
+                    log(`- URL: ${url}`);
+                    log(`- Status: ${response.status} ${response.statusText}`);
+                    log(`- This usually means Cloudflare is blocking the request`);
+                    log(`- Check: User-Agent, IP reputation, or API rate limits`);
+                    log("----------------------------------------------------------------");
                     return null;
                 }
 
@@ -113,22 +114,22 @@ export async function serverFetch(endpoint, options = {}) {
 
             // JSON response kontrolü
             if (!isJsonResponse(response)) {
-                console.warn(`[serverFetch] ⚠️  Non-JSON response detected (Content-Type: ${response.headers.get("content-type")})`);
+                log(`[serverFetch] ⚠️  Non-JSON response detected (Content-Type: ${response.headers.get("content-type")})`);
                 
                 if (responseText.length > 500) {
-                    console.warn(`[serverFetch] Response preview: ${responseText.substring(0, 500)}...`);
+                    log(`[serverFetch] Response preview: ${responseText.substring(0, 500)}...`);
                 } else {
-                    console.warn(`[serverFetch] Response: ${responseText}`);
+                    log(`[serverFetch] Response: ${responseText}`);
                 }
             }
 
             if (!response.ok) {
-                console.error("----------------------------------------------------------------");
-                console.error(`[serverFetch] ERROR DETECTED!`);
-                console.error(`- URL: ${url}`);
-                console.error(`- Status: ${response.status} ${response.statusText}`);
-                console.error(`- Response Body: ${responseText.substring(0, 500)}${responseText.length > 500 ? "..." : ""}`);
-                console.error("----------------------------------------------------------------");
+                log("----------------------------------------------------------------");
+                log(`[serverFetch] ERROR DETECTED!`);
+                log(`- URL: ${url}`);
+                log(`- Status: ${response.status} ${response.statusText}`);
+                log(`- Response Body: ${responseText.substring(0, 500)}${responseText.length > 500 ? "..." : ""}`);
+                log("----------------------------------------------------------------");
                 
                 // 4xx hataları için retry yapma
                 if (response.status >= 400 && response.status < 500) {
@@ -149,12 +150,12 @@ export async function serverFetch(endpoint, options = {}) {
                 const json = JSON.parse(responseText);
                 return json;
             } catch (parseError) {
-                console.error("----------------------------------------------------------------");
-                console.error(`[serverFetch] JSON PARSE ERROR!`);
-                console.error(`- URL: ${url}`);
-                console.error(`- Parse Error: ${parseError.message}`);
-                console.error(`- Response Preview: ${responseText.substring(0, 500)}...`);
-                console.error("----------------------------------------------------------------");
+                log("----------------------------------------------------------------");
+                log(`[serverFetch] JSON PARSE ERROR!`);
+                log(`- URL: ${url}`);
+                log(`- Parse Error: ${parseError.message}`);
+                log(`- Response Preview: ${responseText.substring(0, 500)}...`);
+                log("----------------------------------------------------------------");
                 
                 if (attempt < retries) {
                     await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * attempt));
@@ -168,19 +169,19 @@ export async function serverFetch(endpoint, options = {}) {
             const duration = Date.now() - startTime;
             
             if (attempt < retries) {
-                console.warn(`[serverFetch] Network error (attempt ${attempt}/${retries}): ${error.message}. Retrying...`);
+                log(`[serverFetch] Network error (attempt ${attempt}/${retries}): ${error.message}. Retrying...`);
                 await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * attempt));
                 continue;
             }
             
-            console.error("----------------------------------------------------------------");
-            console.error(`[serverFetch] CRITICAL/NETWORK ERROR!`);
-            console.error(`- Method/URL: ${method} ${url}`);
-            console.error(`- Duration: ${duration}ms`);
-            console.error(`- Error Message: ${error.message}`);
-            if (error.stack) console.error(`- Stack Trace: ${error.stack.split('\n')[0]}`);
-            console.error(`- All ${retries} retry attempts exhausted`);
-            console.error("----------------------------------------------------------------");
+            log("----------------------------------------------------------------");
+            log(`[serverFetch] CRITICAL/NETWORK ERROR!`);
+            log(`- Method/URL: ${method} ${url}`);
+            log(`- Duration: ${duration}ms`);
+            log(`- Error Message: ${error.message}`);
+            if (error.stack) log(`- Stack Trace: ${error.stack.split('\n')[0]}`);
+            log(`- All ${retries} retry attempts exhausted`);
+            log("----------------------------------------------------------------");
             return null;
         }
     }

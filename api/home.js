@@ -1,16 +1,5 @@
 import { serverFetch } from "@/utils/serverFetch";
-
-/**
- * Header menülerini getirir.
- */
-export async function getMenus() {
-    const response = await serverFetch("/menus?type=header-menu", { next: { revalidate: 10 } });
-    if (response?.status === "success") {
-        return response.data?.items || [];
-    }
-    console.warn("[API home.js] getMenus failed:", response);
-    return [];
-}
+import { log, warn } from "@/utils/logger";
 
 /**
  * Tüm kategorileri getirir.
@@ -20,7 +9,7 @@ export async function getCategories() {
     if (response?.status === "success") {
         return response.data || [];
     }
-    console.warn("[API home.js] getCategories failed:", response);
+    log("[API home.js] getCategories failed:", response);
     return [];
 }
 
@@ -38,14 +27,57 @@ export async function getBanners() {
     if (response?.status === "success") {
         const banners = response.data || [];
         if (banners.length > 0) {
-            console.log(`[API home.js] getBanners success: ${banners.length} banner(s) loaded`);
+            log(`[API home.js] getBanners success: ${banners.length} banner(s) loaded`);
         }
         return banners;
     }
     
-    console.warn("[API home.js] getBanners failed:", {
+    log("[API home.js] getBanners failed:", {
         status: response?.status,
         hasData: !!response?.data,
     });
+    return [];
+}
+
+/**
+ * Collection banner'ı getirir.
+ * @returns {Promise<Object|null>} Collection banner objesi veya null
+ */
+export async function getCollectionBanner() {
+    const response = await serverFetch("/banners?type=collectionbanner", { 
+        next: { revalidate: 0 } 
+    });
+    
+    if (response?.status === "success" && response.data) {
+        // API'den dizi gelirse ilk elemanı, obje gelirse direkt döndür
+        const banner = Array.isArray(response.data) ? response.data[0] : response.data;
+        if (banner) {
+            log(`[API home.js] getCollectionBanner success`);
+            return banner;
+        }
+    }
+    
+    warn("[API home.js] getCollectionBanner failed:", response);
+    return null;
+}
+
+/**
+ * Collections listesini getirir (birden fazla collection banner).
+ * @returns {Promise<Array>} Collections array'i
+ */
+export async function getCollections() {
+    const response = await serverFetch("/banners?type=collections", { 
+        next: { revalidate: 0 } 
+    });
+    
+    if (response?.status === "success") {
+        const collections = Array.isArray(response.data) ? response.data : (response.data ? [response.data] : []);
+        if (collections.length > 0) {
+            log(`[API home.js] getCollections success: ${collections.length} collection(s) loaded`);
+        }
+        return collections;
+    }
+    
+    warn("[API home.js] getCollections failed:", response);
     return [];
 }

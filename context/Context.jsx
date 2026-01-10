@@ -35,6 +35,18 @@ export default function Context({ children }) {
       // openCart();
     }
   };
+
+  // Modal açmadan sepete ekleme (ürün objesi ile)
+  const addProductToCartDirect = (product, qty = 1) => {
+    if (!cartProducts.filter((elm) => elm.id == product.id)[0]) {
+      const item = {
+        ...product,
+        quantity: qty,
+      };
+      setCartProducts((pre) => [...pre, item]);
+      // Modal açılmıyor
+    }
+  };
   const isAddedToCartProducts = (id) => {
     if (cartProducts.filter((elm) => elm.id == id)[0]) {
       return true;
@@ -117,6 +129,7 @@ export default function Context({ children }) {
     setCartProducts,
     totalPrice,
     addProductToCart,
+    addProductToCartDirect,
     isAddedToCartProducts,
     removeFromWishlist,
     addToWishlist,

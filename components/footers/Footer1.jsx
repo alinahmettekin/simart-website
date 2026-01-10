@@ -6,8 +6,8 @@ import axios from "axios";
 import LanguageSelect from "../common/LanguageSelect";
 import CurrencySelect from "../common/CurrencySelect";
 
-import { aboutLinks, footerLinks, paymentImages } from "@/data/footerLinks";
-export default function Footer1({ bgColor = "" }) {
+import { paymentImages } from "@/data/footerLinks";
+export default function Footer1({ bgColor = "", footerMenus = null }) {
   useEffect(() => {
     const headings = document.querySelectorAll(".footer-heading-moblie");
 
@@ -80,7 +80,7 @@ export default function Footer1({ bgColor = "" }) {
                     <Link href={`/`}>
                       <Image
                         alt="image"
-                        src="/images/logo/logo.svg"
+                        src="/images/logo/logo.png"
                         width="136"
                         height="21"
                       />
@@ -152,40 +152,32 @@ export default function Footer1({ bgColor = "" }) {
                   </ul>
                 </div>
               </div>
-              <div className="col-xl-3 col-md-6 col-12 footer-col-block">
-                <div className="footer-heading footer-heading-desktop">
-                  <h6>Yardım</h6>
-                </div>
-                <div className="footer-heading footer-heading-moblie">
-                  <h6>Yardım</h6>
-                </div>
-                <ul className="footer-menu-list tf-collapse-content">
-                  {footerLinks.map((link, index) => (
-                    <li key={index}>
-                      <Link href={link.href} className="footer-menu_item">
-                        {link.text}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="col-xl-3 col-md-6 col-12 footer-col-block">
-                <div className="footer-heading footer-heading-desktop">
-                  <h6>Hakkımızda</h6>
-                </div>
-                <div className="footer-heading footer-heading-moblie">
-                  <h6>Hakkımızda</h6>
-                </div>
-                <ul className="footer-menu-list tf-collapse-content">
-                  {aboutLinks.slice(0, 4).map((link, index) => (
-                    <li key={index}>
-                      <Link href={link.href} className="footer-menu_item">
-                        {link.text}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {/* Footer menüleri - slug'a göre dinamik olarak render edilir */}
+              {Array.isArray(footerMenus) && footerMenus.map((menu) => (
+                menu?.items && menu.items.length > 0 && (
+                  <div key={menu.id || menu.slug} className="col-xl-3 col-md-6 col-12 footer-col-block">
+                    <div className="footer-heading footer-heading-desktop">
+                      <h6>{menu.name}</h6>
+                    </div>
+                    <div className="footer-heading footer-heading-moblie">
+                      <h6>{menu.name}</h6>
+                    </div>
+                    <ul className="footer-menu-list tf-collapse-content">
+                      {menu.items.map((item) => (
+                        <li key={item.id}>
+                          <Link 
+                            href={item.url || "#"} 
+                            className="footer-menu_item"
+                            target={item.target || "_self"}
+                          >
+                            {item.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              ))}
               <div className="col-xl-3 col-md-6 col-12">
                 <div className="footer-newsletter footer-col-block">
                   <div className="footer-heading footer-heading-desktop">

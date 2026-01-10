@@ -47,7 +47,7 @@ export default function Header2({
                 <Image
                   alt="logo"
                   className="logo"
-                  src="/images/logo/logo.svg"
+                  src="/images/logo/logo.png"
                   width="136"
                   height="21"
                 />

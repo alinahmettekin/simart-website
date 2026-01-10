@@ -1,4 +1,5 @@
 import { serverFetch } from "@/utils/serverFetch";
+import { warn } from "@/utils/logger";
 
 /**
  * Tüm blog yazılarını getirir.
@@ -8,7 +9,7 @@ export async function getBlogs() {
     if (response?.status === "success") {
         return response.data || [];
     }
-    console.warn("[API blogs.js] getBlogs failed:", response);
+    warn("[API blogs.js] getBlogs failed:", response);
     return [];
 }
 
@@ -25,6 +26,6 @@ export async function getBlogBySlug(slug) {
         return Array.isArray(response.data) ? response.data[0] : response.data;
     }
 
-    console.warn(`[API blogs.js] getBlogBySlug(${slug}) failed:`, response);
+    warn(`[API blogs.js] getBlogBySlug(${slug}) failed:`, response);
     return null;
 }
