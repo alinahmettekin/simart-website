@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import crypto from "crypto";
 import { log } from "./logger";
 
-const BACKEND_URL = "https://api.simart.cloud/api/v1";
+const BACKEND_URL = process.env.BACKEND_URL;
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1250; // 2 saniye
 

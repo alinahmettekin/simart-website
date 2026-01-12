@@ -1,5 +1,5 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header2 from "@/components/headers/Header2";
+import Footer from "@/components/footers/Footer";
+import Header from "@/otherpages/components/headers/Header";
 import DefaultShopDetails from "@/components/shopDetails/DefaultShopDetails";
 import Details14 from "@/components/shopDetails/Details14";
 import Products from "@/components/shopDetails/Products";
@@ -18,7 +18,7 @@ export default async function page({ params }) {const { id } = await params
     allProducts.filter((elm) => elm.id == id)[0] || allProducts[0];
   return (
     <>
-      <Header2 />
+      <Header />
       <div className="tf-breadcrumb">
         <div className="container">
           <div className="tf-breadcrumb-wrap d-flex justify-content-between flex-wrap align-items-center">
@@ -38,7 +38,7 @@ export default async function page({ params }) {const { id } = await params
       <ShopDetailsTab />
       <Products />
       <RecentProducts />
-      <Footer1 />
+      <Footer />
     </>
   );
 }

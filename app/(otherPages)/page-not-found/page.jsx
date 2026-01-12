@@ -1,4 +1,4 @@
-import Footer1 from "@/components/footers/Footer1";
+import Footer from "@/components/footers/Footer";
 import Header1 from "@/components/headers/Header1";
 import Image from "next/image";
 import Link from "next/link";
@@ -38,7 +38,7 @@ export default function notFound() {
           </div>
         </div>
       </section>
-      <Footer1 />
+      <Footer />
     </>
   );
 }

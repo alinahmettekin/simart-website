@@ -1,5 +1,5 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
+import Footer from "@/components/footers/Footer";
+import Header from "@/components/headers/Header";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -10,7 +10,7 @@ export const metadata = {
 export default function notFound() {
   return (
     <>
-      <Header1 />
+      <Header />
       <section className="page-404-wrap">
         <div className="container">
           <div className="row">
@@ -38,7 +38,7 @@ export default function notFound() {
           </div>
         </div>
       </section>
-      <Footer1 />
+      <Footer />
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { serverFetch } from "@/utils/serverFetch";
-import { log, warn } from "@/utils/logger";
+import { log } from "@/utils/logger";
 
 /**
  * Tüm kategorileri getirir.
@@ -57,7 +57,7 @@ export async function getCollectionBanner() {
         }
     }
     
-    warn("[API home.js] getCollectionBanner failed:", response);
+    log("[API home.js] getCollectionBanner failed:", response);
     return null;
 }
 
@@ -78,6 +78,36 @@ export async function getCollections() {
         return collections;
     }
     
-    warn("[API home.js] getCollections failed:", response);
+    log("[API home.js] getCollections failed:", response);
     return [];
+}
+
+/**
+ * Topbar verilerini getirir.
+ * @returns {Promise<Object>} { data: Array, isActive: boolean }
+ */
+export async function getTopbar() {
+    const response = await serverFetch("/topbars", {
+        next: { revalidate: 10 }
+    });
+
+    if (response?.status === "success") {
+        const data = response.data || [];
+        const isActive = !!response.is_active;
+        
+        if (isActive && data.length > 0) {
+            log(`[API home.js] getTopbar success: ${data.length} topbar item(s) loaded`);
+        }
+        
+        return {
+            data,
+            isActive
+        };
+    }
+
+    log("[API home.js] getTopbar failed:", response);
+    return {
+        data: [],
+        isActive: false
+    };
 }

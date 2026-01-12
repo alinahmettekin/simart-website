@@ -1,5 +1,5 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header2 from "@/components/headers/Header2";
+import Footer from "@/components/footers/Footer";
+import Header from "@/otherpages/components/headers/Header";
 import About from "@/components/othersPages/about/About";
 import Features from "@/components/othersPages/about/Features";
 import FlatTitle from "@/components/othersPages/about/FlatTitle";
@@ -15,7 +15,7 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header2 />
+      <Header />
       <Hero />
       <FlatTitle />
       <div className="container">
@@ -28,7 +28,7 @@ export default function page() {
         <div className="line"></div>
       </div>
       <ShopGram />
-      <Footer1 />
+      <Footer />
     </>
   );
 }

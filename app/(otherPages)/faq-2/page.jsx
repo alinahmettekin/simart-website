@@ -1,5 +1,5 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header2 from "@/components/headers/Header2";
+import Footer from "@/components/footers/Footer";
+import Header from "@/otherpages/components/headers/Header";
 import Faq1 from "@/components/othersPages/faq/Faq1";
 import Faq2 from "@/components/othersPages/faq/Faq2";
 import Faq3 from "@/components/othersPages/faq/Faq3";
@@ -12,7 +12,7 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header2 />
+      <Header />
       <>
         {/* page-title */}
         <div className="tf-page-title style-2">
@@ -83,7 +83,7 @@ export default function page() {
         </section>
       </>
 
-      <Footer1 />
+      <Footer />
     </>
   );
 }

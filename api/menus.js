@@ -1,5 +1,5 @@
 import { serverFetch } from "@/utils/serverFetch";
-import { warn } from "@/utils/logger";
+import { log } from "@/utils/logger";
 
 /**
  * Header menülerini getirir.
@@ -14,7 +14,7 @@ export async function getMenus() {
         return response.data?.items || [];
     }
     
-    warn("[API menus.js] getMenus failed:", response);
+    log("[API menus.js] getMenus failed:", response);
     return [];
 }
 
@@ -25,7 +25,7 @@ export async function getMenus() {
  */
 export async function getMenuByType(menuType) {
     if (!menuType) {
-        warn("[API menus.js] getMenuByType: menuType is required");
+        log("[API menus.js] getMenuByType: menuType is required");
         return null;
     }
 
@@ -37,7 +37,7 @@ export async function getMenuByType(menuType) {
         return response.data;
     }
 
-    warn(`[API menus.js] getMenuByType(${menuType}) failed:`, response);
+    log(`[API menus.js] getMenuByType(${menuType}) failed:`, response);
     return null;
 }
 

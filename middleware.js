@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
 
+// Özel URL mapping'ler (Türkçe -> İngilizce)
+
 export function middleware(request) {
+    
+    // urlMappings'de yoksa, direkt /xxx olarak kalacak
+    // Next.js route priority sayesinde statik route'lar önce eşleşir
+    // Dinamik route'lar (app/(otherPages)/[slug]/page.jsx ve app/(blogs)/[slug]/page.jsx) sonra eşleşir
+    // Rewrite yapmaya gerek yok, direkt /xxx olarak kalacak
+
     // const response = NextResponse.next();
     // const deviceId = request.cookies.get("DEVICE_ID");
 
@@ -17,6 +25,8 @@ export function middleware(request) {
     // }
 
     // return response;
+    
+    return NextResponse.next();
 }
 
 export const config = {

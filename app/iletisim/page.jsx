@@ -1,7 +1,7 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header2 from "@/components/headers/Header2";
-import ContactForm from "@/components/othersPages/contact/ContactForm";
-import Map from "@/components/othersPages/contact/Map";
+import Footer from "@/components/footers/Footer";
+import Header from "@/components/headers/Header";
+import ContactForm from "@/components/contact/ContactForm";
+import Map from "@/components/contact/Map";
 import React from "react";
 
 export const metadata = {
@@ -11,10 +11,9 @@ export const metadata = {
 export default function Contact() {
     return (
         <>
-            <Header2 />
+            <Header />
             <ContactForm />
             <Map />
-            <Footer1 />
         </>
     );
 }

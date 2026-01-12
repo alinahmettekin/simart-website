@@ -1,5 +1,5 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header2 from "@/components/headers/Header2";
+import Footer from "@/components/footers/Footer";
+import Header from "@/otherpages/components/headers/Header";
 import ShopDefault from "@/components/shop/ShopDefault";
 import ShopLoadmore from "@/components/shop/ShopLoadmore";
 import React from "react";
@@ -11,7 +11,7 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header2 />
+      <Header />
       <div className="tf-page-title">
         <div className="container-full">
           <div className="heading text-center">New Arrival</div>
@@ -21,7 +21,7 @@ export default function page() {
         </div>
       </div>
       <ShopLoadmore />
-      <Footer1 />
+      <Footer />
     </>
   );
 }

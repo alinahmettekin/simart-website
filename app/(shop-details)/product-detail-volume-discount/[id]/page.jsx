@@ -1,5 +1,5 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header2 from "@/components/headers/Header2";
+import Footer from "@/components/footers/Footer";
+import Header from "@/otherpages/components/headers/Header";
 
 import Products from "@/components/shopDetails/Products";
 import RecentProducts from "@/components/shopDetails/RecentProducts";
@@ -21,7 +21,7 @@ export default async function page({ params }) {
   return (
     <>
       <div className="color-primary-5">
-        <Header2 />
+        <Header />
         <div className="tf-breadcrumb">
           <div className="container">
             <div className="tf-breadcrumb-wrap d-flex justify-content-between flex-wrap align-items-center">
@@ -43,7 +43,7 @@ export default async function page({ params }) {
         <ShopDetailsTab />
         <Products />
         <RecentProducts />
-        <Footer1 />{" "}
+        <Footer />{" "}
       </div>
     </>
   );

@@ -1,5 +1,5 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header2 from "@/components/headers/Header2";
+import Footer from "@/components/footers/Footer";
+import Header from "@/otherpages/components/headers/Header";
 import Brands from "@/components/othersPages/brands/Brands";
 import React from "react";
 
@@ -10,7 +10,7 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header2 />
+      <Header />
       <div className="tf-page-title style-2">
         <div className="container-full">
           <div className="heading text-center">Brands</div>
@@ -18,7 +18,7 @@ export default function page() {
       </div>
 
       <Brands />
-      <Footer1 />
+      <Footer />
     </>
   );
 }
