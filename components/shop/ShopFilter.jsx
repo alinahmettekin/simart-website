@@ -77,15 +77,17 @@ export default function ShopFilter({ setProducts, products = products1 }) {
   useEffect(() => {
     let filteredArrays = [];
 
+    // Fiyat Filtresi (discount_price varsa onu, yoksa price'ı kullan)
     filteredArrays = [
       ...filteredArrays,
       [
-        ...products.filter(
-          (elm) => elm.price >= price[0] && elm.price <= price[1]
-        ),
+        ...products.filter((elm) => {
+          const finalPrice = elm.discount_price || elm.price || 0;
+          return finalPrice >= price[0] && finalPrice <= price[1];
+        }),
       ],
     ];
-    // console.log(filteredByPrice, "filteredByPrice");
+
     if (selectedColors.length) {
       filteredArrays = [
         ...filteredArrays,
@@ -99,7 +101,6 @@ export default function ShopFilter({ setProducts, products = products1 }) {
       ];
     }
 
-    // console.log(filteredByselectedColors, "filteredByselectedColors");
     if (selectedBrands.length) {
       filteredArrays = [
         ...filteredArrays,
@@ -107,7 +108,6 @@ export default function ShopFilter({ setProducts, products = products1 }) {
       ];
     }
 
-    // console.log(filteredByselectedBrands, "filteredByselectedBrands");
     if (selectedSizes.length) {
       filteredArrays = [
         ...filteredArrays,
@@ -119,16 +119,16 @@ export default function ShopFilter({ setProducts, products = products1 }) {
       ];
     }
 
-    // console.log(filteredByselectedSizes);
     if (selectedAvailabilities.length) {
       filteredArrays = [
         ...filteredArrays,
         [
-          ...products.filter((elm) =>
-            selectedAvailabilities
+          ...products.filter((elm) => {
+            const isItemAvailable = elm.is_in_stock !== undefined ? elm.is_in_stock : elm.isAvailable;
+            return selectedAvailabilities
               .map((elm3) => elm3.isAvailable)
-              .some((elm4) => elm4 == elm.isAvailable)
-          ),
+              .some((elm4) => elm4 == isItemAvailable);
+          }),
         ],
       ];
     }

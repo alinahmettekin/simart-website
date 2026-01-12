@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,6 +13,7 @@ import { Pagination, Navigation } from "swiper/modules";
  * @param {string} props.productName - Product name for alt text
  * @param {number} props.width - Image width (default: 360)
  * @param {number} props.height - Image height (default: 360)
+ * @param {Array} props.campaignTags - Array of campaign tag image URLs
  */
 export default function ProductImageSwiper({
     images = [],
@@ -20,6 +21,7 @@ export default function ProductImageSwiper({
     productName = "product",
     width = 360,
     height = 360,
+    campaignTags = [],
 }) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -27,7 +29,7 @@ export default function ProductImageSwiper({
         return (
             <div className="product-img">
                 <Image
-                    className="lazyload img-product"
+                    className="img-product"
                     src="/images/products/product-1.jpg"
                     alt={productName}
                     width={width}
@@ -41,25 +43,93 @@ export default function ProductImageSwiper({
     if (images.length === 1) {
         return (
             <>
-                <Link 
-                    href={`/product-detail/${productSlug}`} 
-                    className="product-img no-hover-effect"
-                    style={{ 
-                        position: 'relative',
-                        display: 'block',
-                        width: '100%',
-                        height: '100%'
-                    }}
-                >
-                    <Image
-                        className="lazyload img-product"
-                        data-src={images[0].url}
-                        src={images[0].url}
-                        alt={productName}
-                        width={width}
-                        height={height}
-                    />
-                </Link>
+                <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                    <Link
+                        href={`/product-detail/${productSlug}`}
+                        className="product-img no-hover-effect"
+                        style={{
+                            position: 'relative',
+                            display: 'block',
+                            width: '100%',
+                            height: '100%'
+                        }}
+                    >
+                        <Image
+                            className="img-product"
+                            src={images[0].url}
+                            alt={productName}
+                            width={width}
+                            height={height}
+                            loading="lazy"
+                        />
+                    </Link>
+                    {/* Kampanya etiketleri */}
+                    {campaignTags && campaignTags.length > 0 && (
+                        <>
+                            {(() => {
+                                const positionCounters = { left: 0, center: 0, right: 0 };
+                                const tagHeight = 75;
+                                const gap = 10;
+                                const renderTags = [];
+
+                                campaignTags.forEach((tag, index) => {
+                                    const position = tag.position || 'left';
+                                    const counter = positionCounters[position];
+
+                                    if (counter < 3) {
+                                        let positionStyle = {};
+                                        const topValue = 10 + (counter * (tagHeight + gap));
+
+                                        if (position === 'left') {
+                                            positionStyle = { top: `${topValue}px`, left: '10px' };
+                                        } else if (position === 'center') {
+                                            positionStyle = { top: `${topValue}px`, left: '50%', transform: 'translateX(-50%)' };
+                                        } else if (position === 'right') {
+                                            positionStyle = { top: `${topValue}px`, right: '10px' };
+                                        }
+
+                                        renderTags.push({
+                                            ...tag,
+                                            style: {
+                                                position: 'absolute',
+                                                zIndex: 10,
+                                                ...positionStyle,
+                                            },
+                                            key: `${position}-${counter}-${index}`,
+                                        });
+
+                                        positionCounters[position]++;
+                                    }
+                                });
+
+                                return renderTags.map((tag) => (
+                                    <Link
+                                        key={tag.key}
+                                        href={`/product-detail/${productSlug}`}
+                                        className="campaign-tag"
+                                        style={{
+                                            ...tag.style,
+                                            cursor: 'pointer',
+                                            display: 'block',
+                                        }}
+                                    >
+                                        <Image
+                                            src={tag.url}
+                                            alt="Campaign Tag"
+                                            width={60}
+                                            height={60}
+                                            style={{
+                                                maxWidth: '75px',
+                                                height: 'auto',
+                                                objectFit: 'contain',
+                                            }}
+                                        />
+                                    </Link>
+                                ));
+                            })()}
+                        </>
+                    )}
+                </div>
                 <style jsx global>{`
                     .no-hover-effect .img-product,
                     .no-hover-effect:hover .img-product,
@@ -89,17 +159,84 @@ export default function ProductImageSwiper({
                         <SwiperSlide key={index}>
                             <Link href={`/product-detail/${productSlug}`} className="product-img">
                                 <Image
-                                    className="lazyload img-product"
-                                    data-src={image.url}
+                                    className="img-product"
                                     src={image.url}
                                     alt={`${productName} - ${index + 1}`}
                                     width={width}
                                     height={height}
+                                    
+                                    loading="lazy"
                                 />
                             </Link>
                         </SwiperSlide>
                     ))}
                 </Swiper>
+                {/* Kampanya etiketleri */}
+                {campaignTags && campaignTags.length > 0 && (
+                    <>
+                        {(() => {
+                            const positionCounters = { left: 0, center: 0, right: 0 };
+                            const tagHeight = 75;
+                            const gap = 10;
+                            const renderTags = [];
+
+                            campaignTags.forEach((tag, index) => {
+                                const position = tag.position || 'left';
+                                const counter = positionCounters[position];
+
+                                if (counter < 3) {
+                                    let positionStyle = {};
+                                    const topValue = 10 + (counter * (tagHeight + gap));
+
+                                    if (position === 'left') {
+                                        positionStyle = { top: `${topValue}px`, left: '10px' };
+                                    } else if (position === 'center') {
+                                        positionStyle = { top: `${topValue}px`, left: '50%', transform: 'translateX(-50%)' };
+                                    } else if (position === 'right') {
+                                        positionStyle = { top: `${topValue}px`, right: '10px' };
+                                    }
+
+                                    renderTags.push({
+                                        ...tag,
+                                        style: {
+                                            position: 'absolute',
+                                            zIndex: 10,
+                                            ...positionStyle,
+                                        },
+                                        key: `${position}-${counter}-${index}`,
+                                    });
+
+                                    positionCounters[position]++;
+                                }
+                            });
+
+                            return renderTags.map((tag) => (
+                                <Link
+                                    key={tag.key}
+                                    href={`/product-detail/${productSlug}`}
+                                    className="campaign-tag"
+                                    style={{
+                                        ...tag.style,
+                                        cursor: 'pointer',
+                                        display: 'block',
+                                    }}
+                                >
+                                    <Image
+                                        src={tag.url}
+                                        alt="Campaign Tag"
+                                        width={60}
+                                        height={60}
+                                        style={{
+                                            maxWidth: '75px',
+                                            height: 'auto',
+                                            objectFit: 'contain',
+                                        }}
+                                    />
+                                </Link>
+                            ));
+                        })()}
+                    </>
+                )}
             </div>
             <style jsx global>{`
                 .no-hover-effect .img-product,

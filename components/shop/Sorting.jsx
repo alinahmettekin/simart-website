@@ -1,9 +1,8 @@
 "use client";
-import { products1 } from "@/data/products";
 import { sortingOptions } from "@/data/shop";
 import React, { useEffect, useState } from "react";
 
-export default function Sorting({ products = products1, setFinalSorted }) {
+export default function Sorting({ products = [], setFinalSorted }) {
   const [selectedOptions, setSelectedOptions] = useState(sortingOptions[0]);
 
   useEffect(() => {
@@ -11,18 +10,34 @@ export default function Sorting({ products = products1, setFinalSorted }) {
       setFinalSorted([...products]);
     } else if (selectedOptions.text == "Alphabetically, A-Z") {
       setFinalSorted(
-        [...products].sort((a, b) => a.title.localeCompare(b.title))
+        [...products].sort((a, b) => {
+          const nameA = (a.name || a.title || "").toLowerCase();
+          const nameB = (b.name || b.title || "").toLowerCase();
+          return nameA.localeCompare(nameB);
+        })
       );
     } else if (selectedOptions.text == "Alphabetically, Z-A") {
       setFinalSorted(
-        [...products].sort((a, b) => b.title.localeCompare(a.title))
+        [...products].sort((a, b) => {
+          const nameA = (a.name || a.title || "").toLowerCase();
+          const nameB = (b.name || b.title || "").toLowerCase();
+          return nameB.localeCompare(nameA);
+        })
       );
     } else if (selectedOptions.text == "Price, low to high") {
-      setFinalSorted([...products].sort((a, b) => a.price - b.price));
+      setFinalSorted([...products].sort((a, b) => {
+        const priceA = a.discount_price || a.price || 0;
+        const priceB = b.discount_price || b.price || 0;
+        return priceA - priceB;
+      }));
     } else if (selectedOptions.text == "Price, high to low") {
-      setFinalSorted([...products].sort((a, b) => b.price - a.price));
+      setFinalSorted([...products].sort((a, b) => {
+        const priceA = a.discount_price || a.price || 0;
+        const priceB = b.discount_price || b.price || 0;
+        return priceB - priceA;
+      }));
     }
-  }, [products, selectedOptions]);
+  }, [products, selectedOptions, setFinalSorted]);
 
   return (
     <>

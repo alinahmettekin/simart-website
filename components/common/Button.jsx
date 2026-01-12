@@ -12,6 +12,8 @@ import Link from "next/link";
  * @param {boolean} props.fullWidth - Full width button (default: false)
  * @param {string} props.variant - Button variant: 'primary', 'outline' (default: 'primary')
  * @param {string} props.modalTarget - Modal target (e.g., '#quick_add') for onClick buttons
+ * @param {boolean} props.disabled - Disabled state (default: false)
+ * @param {Object} props.style - Inline styles
  */
 export default function Button({
     href,
@@ -22,6 +24,8 @@ export default function Button({
     fullWidth = false,
     variant = "primary",
     modalTarget = null,
+    disabled = false,
+    style = {},
 }) {
     const baseClasses = "tf-btn btn-primary-main style-3 fw-6 btn-light-icon animate-hover-btn";
     const sizeClass = size ? `btn-${size}` : "";
@@ -56,6 +60,10 @@ export default function Button({
                 <a
                     href={modalTarget || "#"}
                     onClick={(e) => {
+                        if (disabled) {
+                            e.preventDefault();
+                            return;
+                        }
                         if (modalTarget) {
                             // Modal açma işlemi Bootstrap tarafından yapılacak
                             // onClick fonksiyonunu da çağır
@@ -67,6 +75,10 @@ export default function Button({
                     }}
                     data-bs-toggle={modalTarget ? "modal" : undefined}
                     className={allClasses}
+                    style={{
+                        ...style,
+                        ...(disabled ? { opacity: 0.6, cursor: "not-allowed", pointerEvents: "none" } : {}),
+                    }}
                 >
                     <span>{text}</span>
                 </a>
@@ -77,7 +89,11 @@ export default function Button({
 
     return (
         <>
-            <button className={allClasses}>
+            <button 
+                className={allClasses}
+                disabled={disabled}
+                style={style}
+            >
                 <span>{text}</span>
             </button>
             {buttonStyle}

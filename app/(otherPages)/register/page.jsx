@@ -6,6 +6,7 @@ export const metadata = {
   title: "Register || Ecomus - Ultimate Nextjs Ecommerce Template",
   description: "Ecomus - Ultimate Nextjs Ecommerce Template",
 };
+
 export default function page() {
   return (
     <>

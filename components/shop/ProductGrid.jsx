@@ -1,6 +1,6 @@
 import { products1 } from "@/data/products";
 import React from "react";
-import { ProductCard } from "../shopCards/ProductCard";
+import ProductCardSimart from "../shopCards/ProductCardSimart";
 import Productcard23 from "../shopCards/Productcard23";
 
 export default function ProductGrid({
@@ -34,7 +34,7 @@ export default function ProductGrid({
         >
           {/* card product 1 */}
           {allproducts.map((elm, i) => (
-            <ProductCard product={elm} key={i} />
+            <ProductCardSimart product={elm} key={i} />
           ))}
         </div>
       )}
