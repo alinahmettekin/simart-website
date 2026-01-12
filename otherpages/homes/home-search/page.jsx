@@ -1,6 +1,6 @@
-import Footer2 from "@/otherpages/components/footers/Footer2";
-import Header from "@/otherpages/components/headers/Header";
-import Topbar2 from "@/otherpages/components/headers/Topbar2";
+import Footer2 from "@/components/footers/Footer2";
+import Header from "@/components/headers/Header";
+import Topbar2 from "@/components/headers/Topbar2";
 import Products from "@/components/homes/home-search/Products";
 import React from "react";
 

@@ -1,5 +1,5 @@
 import Footer from "@/components/footers/Footer";
-import Header from "@/otherpages/components/headers/Header";
+import Header from "@/components/headers/Header";
 import Brands from "@/components/homes/home-1/Brands";
 import Features2 from "@/components/homes/home-5/Features";
 import Banner from "@/components/homes/home-headphone/Banner";

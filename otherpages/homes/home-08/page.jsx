@@ -1,4 +1,4 @@
-import Footer2 from "@/otherpages/components/footers/Footer2";
+import Footer2 from "@/components/footers/Footer2";
 import Header6 from "@/components/headers/Header6";
 import Announcement from "@/components/common/Announcement";
 import Blogs from "@/components/homes/home-8/Blogs";

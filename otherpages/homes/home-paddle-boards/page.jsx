@@ -1,6 +1,6 @@
 import Header12 from "@/components/headers/Header12";
 
-import Topbar2 from "@/otherpages/components/headers/Topbar2";
+import Topbar2 from "@/components/headers/Topbar2";
 import Banner from "@/components/homes/home-paddle-boards/Banner";
 import Banner2 from "@/components/homes/home-paddle-boards/Banner2";
 import Categories from "@/components/homes/home-paddle-boards/Categories";
@@ -12,7 +12,7 @@ import Products from "@/components/homes/home-paddle-boards/Products";
 import Products2 from "@/components/homes/home-paddle-boards/Products2";
 import Testimonials from "@/components/homes/home-paddle-boards/Testimonials";
 import React from "react";
-import Footer2 from "@/otherpages/components/footers/Footer2";
+import Footer2 from "@/components/footers/Footer2";
 
 export const metadata = {
   title: "Home Paddle Boards || Ecomus - Ultimate Nextjs Ecommerce Template",

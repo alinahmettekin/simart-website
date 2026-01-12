@@ -1,5 +1,5 @@
 import Footer from "@/components/footers/Footer";
-import Header from "@/otherpages/components/headers/Header";
+import Header from "@/components/headers/Header";
 
 import ShopLoadmoreOnScroll from "@/components/shop/ShopLoadmoreOnScroll";
 import React from "react";

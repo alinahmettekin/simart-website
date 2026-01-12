@@ -1,6 +1,6 @@
 import Features from "@/components/common/Features2";
-import Footer2 from "@/otherpages/components/footers/Footer2";
-import Header from "@/otherpages/components/headers/Header";
+import Footer from "@/components/footers/Footer";
+import Header from "@/components/headers/Header";
 import Blogs from "@/components/homes/home-electronic/Blogs";
 import Categories from "@/components/homes/home-electronic/Categories";
 import CollectionBanner from "@/components/homes/home-electronic/CollectionBanner";
@@ -11,7 +11,6 @@ import Hero from "@/components/homes/home-electronic/Hero";
 import Marquee from "@/components/homes/home-electronic/Marquee";
 import Products from "@/components/homes/home-electronic/Products";
 import Testimonials from "@/components/homes/home-electronic/Testimonials";
-import Topbar from "@/components/headers/Topbar";
 import React from "react";
 
 export const metadata = {
@@ -33,7 +32,7 @@ export default function page() {
         <Testimonials />
         <Blogs />
         <Features />
-        <Footer2 />
+        <Footer />
       </div>
     </>
   );

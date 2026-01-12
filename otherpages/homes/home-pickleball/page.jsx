@@ -1,5 +1,5 @@
 import Announcement from "@/components/common/Announcement";
-import Footer2 from "@/otherpages/components/footers/Footer2";
+import Footer2 from "@/components/footers/Footer2";
 
 import Header21 from "@/components/headers/Header21";
 import Banner from "@/components/homes/home-pickleball/Banner";

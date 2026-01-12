@@ -1,5 +1,4 @@
-import Footer from "@/components/footers/Footer";
-import Header from "@/otherpages/components/headers/Header";
+import Header from "@/components/headers/Header";
 import Faq1 from "@/components/othersPages/faq/Faq1";
 import Faq2 from "@/components/othersPages/faq/Faq2";
 import Faq3 from "@/components/othersPages/faq/Faq3";
@@ -58,7 +57,6 @@ export default function page() {
         </section>
       </>
 
-      <Footer />
     </>
   );
 }

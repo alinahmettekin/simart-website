@@ -1,5 +1,5 @@
 import Features from "@/components/common/Features2";
-import Footer4 from "@/otherpages/components/footers/Footer4";
+import Footer4 from "@/components/footers/Footer4";
 import Header5 from "@/components/headers/Header5";
 import Banner from "@/components/homes/home-jewerly/Banner";
 import Categories from "@/components/homes/home-jewerly/Categories";

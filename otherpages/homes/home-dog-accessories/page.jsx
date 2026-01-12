@@ -2,7 +2,7 @@ import Features from "@/components/common/Features";
 import Footer from "@/components/footers/Footer";
 import Header11 from "@/components/headers/Header11";
 
-import Topbar1 from "@/otherpages/components/headers/Topbar1";
+import Topbar1 from "@/components/headers/Topbar1";
 import Categories from "@/components/homes/home-dog-accessories/Categories";
 import Collection from "@/components/homes/home-dog-accessories/Collection";
 import CollectionBanner from "@/components/homes/home-dog-accessories/CollectionBanner";

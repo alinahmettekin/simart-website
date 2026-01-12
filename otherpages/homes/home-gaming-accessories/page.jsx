@@ -1,6 +1,6 @@
 import Brands from "@/components/common/Brands";
 import Features from "@/components/common/Features2";
-import Footer2 from "@/otherpages/components/footers/Footer2";
+import Footer2 from "@/components/footers/Footer2";
 import Header22 from "@/components/headers/Header22";
 import Topbar4 from "@/components/headers/Topbar4";
 import Collections from "@/components/homes/home-gaming-accessories/Collections";

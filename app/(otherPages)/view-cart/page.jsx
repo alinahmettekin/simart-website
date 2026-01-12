@@ -1,6 +1,5 @@
 import Testimonials from "@/components/common/Testimonials";
-import Footer from "@/components/footers/Footer";
-import Header from "@/otherpages/components/headers/Header";
+import Header from "@/components/headers/Header";
 import Cart from "@/components/othersPages/Cart";
 import RecentProducts from "@/components/shopDetails/RecentProducts";
 import React from "react";
@@ -22,7 +21,6 @@ export default function page() {
       <Cart />
       <Testimonials />
       <RecentProducts />
-      <Footer />
     </>
   );
 }

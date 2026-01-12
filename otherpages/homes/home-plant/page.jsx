@@ -1,4 +1,4 @@
-import Footer8 from "@/otherpages/components/footers/Footer8";
+import Footer8 from "@/components/footers/Footer8";
 import Header19 from "@/components/headers/Header19";
 import Announcmentbar from "@/components/homes/home-plant/Announcmentbar";
 import Banner from "@/components/homes/home-plant/Banner";

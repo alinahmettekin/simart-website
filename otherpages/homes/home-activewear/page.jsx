@@ -1,5 +1,5 @@
 import Announcement from "@/components/common/Announcement";
-import Footer5 from "@/otherpages/components/footers/Footer5";
+import Footer5 from "@/components/footers/Footer5";
 import Header13 from "@/components/headers/Header13";
 import Banner from "@/components/homes/home-activewear/Banner";
 import Collections from "@/components/homes/home-activewear/Collections";

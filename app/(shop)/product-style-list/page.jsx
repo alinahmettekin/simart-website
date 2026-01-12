@@ -1,6 +1,5 @@
 import Footer from "@/components/footers/Footer";
-import Header from "@/otherpages/components/headers/Header";
-import Topbar1 from "@/otherpages/components/headers/Topbar1";
+import Header from "@/components/headers/Header";
 import ShopDefault from "@/components/shop/ShopDefault";
 import ShopStyleList from "@/components/shop/ShopStyleList";
 import React from "react";
@@ -12,7 +11,6 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Topbar1 />
       <Header />
       <div className="tf-page-title">
         <div className="container-full">

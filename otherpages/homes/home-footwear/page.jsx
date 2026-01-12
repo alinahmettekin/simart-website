@@ -1,9 +1,9 @@
 import Marquee from "@/components/common/Marquee";
 
-import Footer6 from "@/otherpages/components/footers/Footer6";
+import Footer6 from "@/components/footers/Footer6";
 
 import Header20 from "@/components/headers/Header20";
-import Topbar2 from "@/otherpages/components/headers/Topbar2";
+import Topbar2 from "@/components/headers/Topbar2";
 import Banner from "@/components/homes/home-footwear/Banner";
 import Banner2 from "@/components/homes/home-footwear/Banner2";
 import Collections from "@/components/homes/home-footwear/Collections";

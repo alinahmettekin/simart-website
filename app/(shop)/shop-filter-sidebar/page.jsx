@@ -1,5 +1,5 @@
 import Footer from "@/components/footers/Footer";
-import Header from "@/otherpages/components/headers/Header";
+import Header from "@/components/headers/Header";
 import FilterSidebar from "@/components/shop/FilterSidebar";
 
 import React from "react";

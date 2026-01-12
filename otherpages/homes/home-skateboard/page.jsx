@@ -1,4 +1,4 @@
-import Footer4 from "@/otherpages/components/footers/Footer4";
+import Footer4 from "@/components/footers/Footer4";
 import Header1 from "@/components/headers/Header1";
 import Brands from "@/components/homes/home-1/Brands";
 import Features from "@/components/homes/home-6/Features";

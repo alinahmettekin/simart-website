@@ -1,4 +1,4 @@
-import Footer6 from "@/otherpages/components/footers/Footer6";
+import Footer6 from "@/components/footers/Footer6";
 import Header6 from "@/components/headers/Header6";
 import BannerCollections from "@/components/homes/home-handbag/BannerCollections";
 import Collections from "@/components/homes/home-handbag/Collections";

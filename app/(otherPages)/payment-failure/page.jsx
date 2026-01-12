@@ -1,5 +1,4 @@
-import Footer from "@/components/footers/Footer";
-import Header from "@/otherpages/components/headers/Header";
+import Header from "@/components/headers/Header";
 import PaymentFailure from "@/components/othersPages/PaymentFailure";
 import React from "react";
 
@@ -18,7 +17,6 @@ export default function page() {
       </div>
 
       <PaymentFailure />
-      <Footer />
     </>
   );
 }

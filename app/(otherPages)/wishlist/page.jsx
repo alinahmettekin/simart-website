@@ -1,6 +1,4 @@
-import Footer from "@/components/footers/Footer";
-import Header from "@/otherpages/components/headers/Header";
-import Topbar1 from "@/otherpages/components/headers/Topbar1";
+import Header from "@/components/headers/Header";
 
 import Wishlist from "@/components/othersPages/Wishlist";
 import React from "react";
@@ -21,7 +19,6 @@ export default function page() {
 
       <Wishlist />
 
-      <Footer />
     </>
   );
 }

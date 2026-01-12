@@ -1,5 +1,5 @@
 import Footer from "@/components/footers/Footer";
-import Header from "@/otherpages/components/headers/Header";
+import Header from "@/components/headers/Header";
 import DashboardNav from "@/components/othersPages/dashboard/DashboardNav";
 import MyAccount from "@/components/othersPages/dashboard/MyAccount";
 import React from "react";
