@@ -34,6 +34,13 @@ export default function ProductImageSwiper({
                     alt={productName}
                     width={width}
                     height={height}
+                    quality={90}
+                    style={{
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                        width: '100%',
+                        height: '100%'
+                    }}
                 />
             </div>
         );
@@ -60,6 +67,13 @@ export default function ProductImageSwiper({
                             alt={productName}
                             width={width}
                             height={height}
+                            quality={90}
+                            style={{
+                                objectFit: 'cover',
+                                objectPosition: 'center',
+                                width: '100%',
+                                height: '100%'
+                            }}
                             loading="lazy"
                         />
                     </Link>
@@ -164,7 +178,13 @@ export default function ProductImageSwiper({
                                     alt={`${productName} - ${index + 1}`}
                                     width={width}
                                     height={height}
-                                    
+                                    quality={90}
+                                    style={{
+                                        objectFit: 'cover',
+                                        objectPosition: 'center',
+                                        width: '100%',
+                                        height: '100%'
+                                    }}
                                     loading="lazy"
                                 />
                             </Link>
@@ -276,4 +296,3 @@ export default function ProductImageSwiper({
         </>
     );
 }
-

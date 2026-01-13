@@ -14,25 +14,19 @@ export default function ProductCardSimart({ product }) {
     } = useContextElement();
 
     const title = product.name || product.title;
-    // API'den gelen format: discount_price varsa o fiyat, yoksa price
     const finalPrice = product.discount_price || product.price || 0;
     const oldPrice = product.discount_price ? product.price : null;
-    // Rating bilgisi (API'den geliyorsa)
     const rating = product.rating || product.average_rating || 0;
     const reviewCount = product.reviews_count || product.review_count || 0;
     const productSlug = product.slug || product.id;
-    // API'den gelen images array'i
     const productImages = product.images || [];
-    // Kampanya etiketleri
     const campaignTags = product.campaign_tags || [];
 
-    // Stok ve ön sipariş kontrolü
     const isInStock = product.is_in_stock || false;
     const unlimitedStock = product.unlimited_stock || false;
     const isPreOrder = product.is_pre_order || false;
     const stockQuantity = product.stock_quantity || 0;
 
-    // Buton mantığı:
     let buttonText = "Sepete Ekle";
     let buttonAction = "addToCart";
     let buttonDisabled = false;
@@ -40,10 +34,8 @@ export default function ProductCardSimart({ product }) {
     if (isInStock) {
         if (unlimitedStock) {
             buttonText = "Sepete Ekle";
-            buttonAction = "addToCart";
         } else {
-            buttonText = `Son ${stockQuantity} ürün kaldı`;
-            buttonAction = "addToCart";
+            buttonText = `Son ${stockQuantity} ürün`;
         }
     } else {
         if (isPreOrder) {
@@ -63,142 +55,84 @@ export default function ProductCardSimart({ product }) {
                     images={productImages}
                     productSlug={productSlug}
                     productName={title}
-                    width={600}
-                    height={600}
+                    width={1000}
+                    height={1000}
                     campaignTags={campaignTags}
                 />
             </div>
-            <div className="card-product-info has-padding">
-                <Link
-                    href={`/product-detail/${productSlug}`}
-                    className="title link"
-                >
-                    {title}
-                </Link>
+            <div className="card-product-info">
+                <div className="title-box">
+                    <Link href={`/product-detail/${productSlug}`} className="title">
+                        {title}
+                    </Link>
+                </div>
 
-                {/* Rating ve Review - Her zaman göster (boşluk için) */}
-                <div className="product-rating d-flex align-items-center gap-2" style={{ minHeight: '24px' }}>
-                    {rating > 0 ? (
+                <div className="rating-box">
+                    {rating > 0 && (
                         <>
                             <div className="rating d-flex gap-1">
-                                {Array.from({ length: 5 }).map((_, i) => {
-                                    const starValue = i + 1;
-                                    const filled = starValue <= Math.floor(rating);
-                                    const halfFilled = starValue === Math.ceil(rating) && rating % 1 >= 0.5;
-
-                                    return (
-                                        <i
-                                            key={i}
-                                            className={`icon-star ${filled ? 'text-warning' : halfFilled ? 'text-warning opacity-50' : 'text-muted'}`}
-                                            style={{ fontSize: '14px' }}
-                                        />
-                                    );
-                                })}
-                            </div>
-                            <span className="rating-value" style={{ fontSize: '14px', fontWeight: '500' }}>
-                                {rating.toFixed(1)}
-                            </span>
-                            {reviewCount > 0 ? (
-                                <span className="review-count text-muted" style={{ fontSize: '12px' }}>
-                                    ({reviewCount})
-                                </span>
-                            ) : (
-                                <span className="review-count text-muted" style={{ fontSize: '12px', visibility: 'hidden' }}>
-                                    (0)
-                                </span>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <div className="rating d-flex gap-1" style={{ visibility: 'hidden' }}>
-                                {Array.from({ length: 5 }).map((_, i) => (
+                                {[...Array(5)].map((_, i) => (
                                     <i
                                         key={i}
-                                        className="icon-star text-muted"
+                                        className={`icon-star ${i < Math.floor(rating) ? 'text-warning' : 'text-muted'}`}
                                         style={{ fontSize: '14px' }}
                                     />
                                 ))}
                             </div>
-                            <span className="rating-value" style={{ fontSize: '14px', fontWeight: '500', visibility: 'hidden' }}>
-                                0.0
-                            </span>
-                            <span className="review-count text-muted" style={{ fontSize: '12px', visibility: 'hidden' }}>
-                                (0)
-                            </span>
+                            <span className="rating-value">{rating.toFixed(1)}</span>
+                            {reviewCount > 0 && (
+                                <span className="review-count">({reviewCount})</span>
+                            )}
                         </>
                     )}
                 </div>
 
-                {/* Fiyat */}
-                {oldPrice ? (
-                    <span className="price d-block">
-                        <span className="old-price text-muted text-decoration-line-through me-2">
-                            ₺{oldPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        </span>
-                        <span className="new-price fw-bold">
-                            ₺{finalPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        </span>
-                    </span>
-                ) : (
-                    <span className="price d-block fw-bold">
-                        ₺{finalPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </span>
-                )}
-
-                {/* Buton: Stok durumuna göre Sepete Ekle, Ön Sipariş Ver veya Stokta Yok + Favorilere Ekle */}
-                <div className="d-flex gap-2 align-items-stretch mt-auto">
-                    {buttonAction === "addToCart" ? (
-                        <Button
-                            onClick={() => {
-                                addProductToCartDirect(product);
-                            }}
-                            text={buttonText}
-                            size="sm"
-                            fullWidth={true}
-                            className="text-center flex-grow-1"
-                        />
-                    ) : buttonAction === "preOrder" ? (
-                        <Button
-                            onClick={() => {
-                                // Ön sipariş için sepete ekleme işlemi
-                                addProductToCartDirect(product);
-                            }}
-                            text={buttonText}
-                            size="sm"
-                            fullWidth={true}
-                            className="text-center flex-grow-1"
-                        />
+                <div className="price-box">
+                    {oldPrice ? (
+                        <div className="price">
+                            <span className="text-muted text-decoration-line-through me-2" style={{ fontSize: '13px' }}>
+                                ₺{oldPrice.toLocaleString('tr-TR')}
+                            </span>
+                            <span className="fw-bold">
+                                ₺{finalPrice.toLocaleString('tr-TR')}
+                            </span>
+                        </div>
                     ) : (
+                        <span className="price fw-bold">
+                            ₺{finalPrice.toLocaleString('tr-TR')}
+                        </span>
+                    )}
+                </div>
+
+                <div className="product-buttons-container d-flex gap-2 align-items-center">
+                    <div className="flex-grow-1">
                         <Button
+                            onClick={() => addProductToCartDirect(product)}
                             text={buttonText}
                             size="sm"
                             fullWidth={true}
-                            className="text-center flex-grow-1"
-                            disabled={true}
+                            disabled={buttonDisabled}
+                            className="custom-product-btn"
                         />
-                    )}
+                    </div>
                     <button
                         onClick={() => addToWishlist(product.id)}
-                        className={`btn btn-sm rounded-full d-flex align-items-center justify-content-center bg-white border wishlist-button hover-tooltip center position-relative ${isAddedtoWishlist(product.id) ? 'active' : ''}`}
-                        style={{
-                            minWidth: '48px',
-                            width: '48px',
-                            padding: '0',
-                            borderColor: '#e0e0e0',
-                        }}
+                        className={`wishlist-button d-flex align-items-center justify-content-center ${isAddedtoWishlist(product.id) ? 'active' : ''}`}
                     >
-                        <span className={`icon icon-heart ${isAddedtoWishlist(product.id) ? "added" : ""}`} />
-                        <span className="tooltip">
-                            {isAddedtoWishlist(product.id)
-                                ? "İstek Listesinden Kaldır"
-                                : "İstek Listesine Ekle"}
-                        </span>
+                        <span className="icon icon-heart" />
                     </button>
                 </div>
             </div>
             <style jsx>{`
                 .wishlist-button {
                     transition: all 0.3s ease;
+                    min-width: 44px !important;
+                    width: 44px !important;
+                    height: 44px !important;
+                    padding: 0 !important;
+                    border-radius: 50% !important;
+                    background-color: #fff !important;
+                    border: 1px solid #e0e0e0 !important;
                 }
                 .wishlist-button:hover {
                     background-color: #000 !important;
@@ -207,26 +141,77 @@ export default function ProductCardSimart({ product }) {
                 .wishlist-button:hover .icon-heart {
                     color: #fff !important;
                 }
-                .wishlist-button .tooltip {
-                    top: auto !important;
-                    bottom: 100% !important;
-                    margin-top: 0 !important;
-                    margin-bottom: 8px !important;
-                    z-index: 10 !important;
-                }
-                .card-product {
-                    padding: 0px !important;
-                    display: flex;
-                    flex-direction: column;
-                }
-                .card-product-wrapper {
-                    border-radius: 19px !important;
-                    overflow: hidden !important;
-                }
                 .card-product-info {
                     display: flex;
                     flex-direction: column;
                     flex-grow: 1;
+                    padding: 15px !important;
+                    padding-bottom: 20px !important; 
+                }
+                .product-buttons-container {
+                    margin-top: auto;
+                    padding-top: 10px;
+                }
+                .product-buttons-container :global(.custom-product-btn) {
+                    height: 44px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    padding: 0 15px !important;
+                    border-radius: 999px !important;
+                    white-space: nowrap !important;
+                    font-size: 13px !important;
+                    font-weight: 600 !important;
+                }
+                .title-box {
+                    height: 40px;
+                    margin-bottom: 8px;
+                    overflow: hidden;
+                }
+                .title-box .title {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    line-height: 20px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #000;
+                }
+                .rating-box {
+                    height: 20px;
+                    margin-bottom: 10px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                .rating-value {
+                    font-size: 13px;
+                    font-weight: 600;
+                }
+                .review-count {
+                    font-size: 12px;
+                    color: #6c757d;
+                }
+                .price-box {
+                    height: 24px;
+                    margin-bottom: 18px;
+                    display: flex;
+                    align-items: center;
+                }
+                @media (min-width: 768px) {
+                    .title-box {
+                        margin-bottom: 2px;
+                    }
+                    .rating-box {
+                        margin-bottom: 4px;
+                    }
+                    .price-box {
+                        margin-bottom: 10px;
+                    }
+                }
+                .price-box .price {
+                    font-size: 16px;
                 }
             `}</style>
         </div>
