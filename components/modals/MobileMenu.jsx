@@ -109,11 +109,11 @@ export default function MobileMenu({ menuItems: initialMenuItems = [] }) {
             <div className="d-flex group-icon">
               <Link href={`/wishlist`} className="site-nav-icon">
                 <i className="icon icon-heart" />
-                Wishlist
+                İstek Listesi
               </Link>
               <Link href={`/home-search`} className="site-nav-icon">
                 <i className="icon icon-search" />
-                Search
+                Ara
               </Link>
             </div>
             <div className="mb-notice">

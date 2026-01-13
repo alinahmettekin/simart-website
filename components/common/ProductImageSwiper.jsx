@@ -14,6 +14,7 @@ import { Pagination, Navigation } from "swiper/modules";
  * @param {number} props.width - Image width (default: 360)
  * @param {number} props.height - Image height (default: 360)
  * @param {Array} props.campaignTags - Array of campaign tag image URLs
+ * @param {string} props.categorySlug - Category slug for link (optional, defaults to "urunler")
  */
 export default function ProductImageSwiper({
     images = [],
@@ -22,6 +23,7 @@ export default function ProductImageSwiper({
     width = 360,
     height = 360,
     campaignTags = [],
+    categorySlug = "urunler",
 }) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -46,13 +48,26 @@ export default function ProductImageSwiper({
         );
     }
 
+    // Görsel URL'ini normalize et (string veya object olabilir)
+    const getImageUrl = (image) => {
+        if (typeof image === 'string') {
+            return image;
+        }
+        if (image && typeof image === 'object') {
+            return image.url || image.webp_url || image.thumbnail_url || image;
+        }
+        return image;
+    };
+
     // Tek görsel varsa Swiper kullanma
     if (images.length === 1) {
+        const imageUrl = getImageUrl(images[0]);
+        
         return (
             <>
                 <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                     <Link
-                        href={`/product-detail/${productSlug}`}
+                        href={`/magaza/${categorySlug}/${productSlug}`}
                         className="product-img no-hover-effect"
                         style={{
                             position: 'relative',
@@ -63,7 +78,7 @@ export default function ProductImageSwiper({
                     >
                         <Image
                             className="img-product"
-                            src={images[0].url}
+                            src={imageUrl}
                             alt={productName}
                             width={width}
                             height={height}
@@ -86,60 +101,71 @@ export default function ProductImageSwiper({
                                 const gap = 10;
                                 const renderTags = [];
 
-                                campaignTags.forEach((tag, index) => {
-                                    const position = tag.position || 'left';
-                                    const counter = positionCounters[position];
+                            campaignTags.forEach((tag, index) => {
+                                // Tag URL'ini normalize et (string veya object olabilir)
+                                const tagUrl = typeof tag === 'string' 
+                                    ? tag 
+                                    : (tag?.url || tag?.image_url || tag?.src || tag);
+                                
+                                // Eğer geçerli bir URL yoksa atla
+                                if (!tagUrl || typeof tagUrl !== 'string') {
+                                    return;
+                                }
 
-                                    if (counter < 3) {
-                                        let positionStyle = {};
-                                        const topValue = 10 + (counter * (tagHeight + gap));
+                                const position = (typeof tag === 'object' ? tag.position : null) || 'left';
+                                const counter = positionCounters[position];
 
-                                        if (position === 'left') {
-                                            positionStyle = { top: `${topValue}px`, left: '10px' };
-                                        } else if (position === 'center') {
-                                            positionStyle = { top: `${topValue}px`, left: '50%', transform: 'translateX(-50%)' };
-                                        } else if (position === 'right') {
-                                            positionStyle = { top: `${topValue}px`, right: '10px' };
-                                        }
+                                if (counter < 3) {
+                                    let positionStyle = {};
+                                    const topValue = 10 + (counter * (tagHeight + gap));
 
-                                        renderTags.push({
-                                            ...tag,
-                                            style: {
-                                                position: 'absolute',
-                                                zIndex: 10,
-                                                ...positionStyle,
-                                            },
-                                            key: `${position}-${counter}-${index}`,
-                                        });
-
-                                        positionCounters[position]++;
+                                    if (position === 'left') {
+                                        positionStyle = { top: `${topValue}px`, left: '10px' };
+                                    } else if (position === 'center') {
+                                        positionStyle = { top: `${topValue}px`, left: '50%', transform: 'translateX(-50%)' };
+                                    } else if (position === 'right') {
+                                        positionStyle = { top: `${topValue}px`, right: '10px' };
                                     }
-                                });
 
-                                return renderTags.map((tag) => (
-                                    <Link
-                                        key={tag.key}
-                                        href={`/product-detail/${productSlug}`}
-                                        className="campaign-tag"
+                                    renderTags.push({
+                                        url: tagUrl,
+                                        position: position,
+                                        style: {
+                                            position: 'absolute',
+                                            zIndex: 10,
+                                            ...positionStyle,
+                                        },
+                                        key: `${position}-${counter}-${index}`,
+                                    });
+
+                                    positionCounters[position]++;
+                                }
+                            });
+
+                            return renderTags.map((tag) => (
+                                <Link
+                                    key={tag.key}
+                                    href={`/magaza/${categorySlug}/${productSlug}`}
+                                    className="campaign-tag"
+                                    style={{
+                                        ...tag.style,
+                                        cursor: 'pointer',
+                                        display: 'block',
+                                    }}
+                                >
+                                    <Image
+                                        src={tag.url}
+                                        alt="Campaign Tag"
+                                        width={60}
+                                        height={60}
                                         style={{
-                                            ...tag.style,
-                                            cursor: 'pointer',
-                                            display: 'block',
+                                            maxWidth: '75px',
+                                            height: 'auto',
+                                            objectFit: 'contain',
                                         }}
-                                    >
-                                        <Image
-                                            src={tag.url}
-                                            alt="Campaign Tag"
-                                            width={60}
-                                            height={60}
-                                            style={{
-                                                maxWidth: '75px',
-                                                height: 'auto',
-                                                objectFit: 'contain',
-                                            }}
-                                        />
-                                    </Link>
-                                ));
+                                    />
+                                </Link>
+                            ));
                             })()}
                         </>
                     )}
@@ -169,27 +195,30 @@ export default function ProductImageSwiper({
                     onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
                     className="product-images-swiper"
                 >
-                    {images.map((image, index) => (
-                        <SwiperSlide key={index}>
-                            <Link href={`/product-detail/${productSlug}`} className="product-img">
-                                <Image
-                                    className="img-product"
-                                    src={image.url}
-                                    alt={`${productName} - ${index + 1}`}
-                                    width={width}
-                                    height={height}
-                                    quality={90}
-                                    style={{
-                                        objectFit: 'cover',
-                                        objectPosition: 'center',
-                                        width: '100%',
-                                        height: '100%'
-                                    }}
-                                    loading="lazy"
-                                />
-                            </Link>
-                        </SwiperSlide>
-                    ))}
+                    {images.map((image, index) => {
+                        const imageUrl = getImageUrl(image);
+                        return (
+                            <SwiperSlide key={index}>
+                                <Link href={`/magaza/${categorySlug}/${productSlug}`} className="product-img">
+                                    <Image
+                                        className="img-product"
+                                        src={imageUrl}
+                                        alt={`${productName} - ${index + 1}`}
+                                        width={width}
+                                        height={height}
+                                        quality={90}
+                                        style={{
+                                            objectFit: 'cover',
+                                            objectPosition: 'center',
+                                            width: '100%',
+                                            height: '100%'
+                                        }}
+                                        loading="lazy"
+                                    />
+                                </Link>
+                            </SwiperSlide>
+                        );
+                    })}
                 </Swiper>
                 {/* Kampanya etiketleri */}
                 {campaignTags && campaignTags.length > 0 && (
@@ -201,7 +230,17 @@ export default function ProductImageSwiper({
                             const renderTags = [];
 
                             campaignTags.forEach((tag, index) => {
-                                const position = tag.position || 'left';
+                                // Tag URL'ini normalize et (string veya object olabilir)
+                                const tagUrl = typeof tag === 'string' 
+                                    ? tag 
+                                    : (tag?.url || tag?.image_url || tag?.src || tag);
+                                
+                                // Eğer geçerli bir URL yoksa atla
+                                if (!tagUrl || typeof tagUrl !== 'string') {
+                                    return;
+                                }
+
+                                const position = (typeof tag === 'object' ? tag.position : null) || 'left';
                                 const counter = positionCounters[position];
 
                                 if (counter < 3) {
@@ -217,7 +256,8 @@ export default function ProductImageSwiper({
                                     }
 
                                     renderTags.push({
-                                        ...tag,
+                                        url: tagUrl,
+                                        position: position,
                                         style: {
                                             position: 'absolute',
                                             zIndex: 10,
@@ -233,7 +273,7 @@ export default function ProductImageSwiper({
                             return renderTags.map((tag) => (
                                 <Link
                                     key={tag.key}
-                                    href={`/product-detail/${productSlug}`}
+                                    href={`/magaza/${categorySlug}/${productSlug}`}
                                     className="campaign-tag"
                                     style={{
                                         ...tag.style,

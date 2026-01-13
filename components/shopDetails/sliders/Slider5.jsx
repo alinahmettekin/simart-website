@@ -8,158 +8,199 @@ import { Gallery, Item } from "react-photoswipe-gallery";
 
 export default function Slider5({
   currentColor = "Beige",
-  handleColor = () => {},
+  handleColor = () => { },
   firstImage,
+  galleryImages = [],
+  model3dUrl = null,
 }) {
-  const images = [
-    {
-      id: 1,
-      src: firstImage || "/images/shop/products/p-d1.png",
-      alt: "",
-      width: 770,
-      height: 1075,
-      dataValue: "beige",
-    },
-    {
-      id: 2,
-      src: "/images/shop/products/hmgoepprod.jpg",
-      alt: "",
+  // galleryImages varsa onu kullan, yoksa eski sabit array'i kullan
+  let images = galleryImages && galleryImages.length > 0
+    ? galleryImages.map((img, index) => {
+        // API'den gelen görsel formatını normalize et
+        const imageUrl = typeof img === 'string' 
+          ? img 
+          : (img.url || img.thumbnail_url || img.src || "");
+        const altText = typeof img === 'object' ? (img.alt_text || img.alt || "") : "";
+        
+        return {
+          id: index + 1,
+          src: imageUrl,
+          alt: altText,
+          width: typeof img === 'object' ? (img.width || 770) : 770,
+          height: typeof img === 'object' ? (img.height || 1075) : 1075,
+          dataValue: currentColor.toLowerCase(),
+        };
+      })
+    : [
+        {
+          id: 1,
+          src: firstImage || "/images/shop/products/p-d1.png",
+          alt: "",
+          width: 770,
+          height: 1075,
+          dataValue: "beige",
+        },
+        {
+          id: 2,
+          src: "/images/shop/products/hmgoepprod.jpg",
+          alt: "",
+          width: 713,
+          height: 1070,
+          dataValue: "beige",
+        },
+        {
+          id: 3,
+          src: "/images/shop/products/hmgoepprod2.jpg",
+          alt: "img-compare",
+          width: 713,
+          height: 1070,
+          dataValue: "beige",
+        },
+        {
+          id: 4,
+          src: "/images/shop/products/preview_images/img-3d-1.jpg",
+          modelSrc: "/images/shop/products/preview_images/dance-bag_3d.glb",
+          alt: "img-compare",
+          width: 713,
+          height: 1070,
+          dataValue: "beige",
+          is3D: true,
+          isModel: true,
+        },
+        {
+          id: 5,
+          src: "/images/shop/products/hmgoepprod4.jpg",
+          alt: "img-compare",
+          width: 768,
+          height: 1152,
+          dataValue: "beige",
+        },
+        {
+          id: 6,
+          src: "/images/shop/products/hmgoepprod5.jpg",
+          alt: "img-compare",
+          width: 713,
+          height: 1070,
+          dataValue: "beige",
+        },
+        {
+          id: 7,
+          src: "/images/shop/products/hmgoepprod6.jpg",
+          alt: "",
+          width: 768,
+          height: 1152,
+          dataValue: "black",
+        },
+        {
+          id: 8,
+          src: "/images/shop/products/hmgoepprod7.jpg",
+          alt: "",
+          width: 713,
+          height: 1070,
+          dataValue: "black",
+        },
+        {
+          id: 9,
+          src: "/images/shop/products/hmgoepprod8.jpg",
+          alt: "",
+          width: 713,
+          height: 1070,
+          dataValue: "black",
+        },
+        {
+          id: 10,
+          src: "/images/shop/products/hmgoepprod9.jpg",
+          alt: "",
+          width: 768,
+          height: 1152,
+          dataValue: "black",
+        },
+        {
+          id: 11,
+          src: "/images/shop/products/hmgoepprod10.jpg",
+          alt: "",
+          width: 713,
+          height: 1070,
+          dataValue: "blue",
+        },
+        {
+          id: 12,
+          src: "/images/shop/products/hmgoepprod11.jpg",
+          alt: "",
+          width: 713,
+          height: 1070,
+          dataValue: "blue",
+        },
+        {
+          id: 13,
+          src: "/images/shop/products/hmgoepprod12.jpg",
+          alt: "",
+          width: 768,
+          height: 1152,
+          dataValue: "blue",
+        },
+        {
+          id: 14,
+          src: "/images/shop/products/hmgoepprod13.jpg",
+          alt: "",
+          width: 768,
+          height: 1152,
+          dataValue: "blue",
+        },
+        {
+          id: 15,
+          src: "/images/shop/products/hmgoepprod14.jpg",
+          alt: "",
+          width: 768,
+          height: 1152,
+          dataValue: "white",
+        },
+        {
+          id: 16,
+          src: "/images/shop/products/hmgoepprod15.jpg",
+          alt: "",
+          width: 768,
+          height: 1152,
+          dataValue: "white",
+        },
+        {
+          id: 17,
+          src: "/images/shop/products/hmgoepprod16.jpg",
+          alt: "",
+          width: 768,
+          height: 1152,
+          dataValue: "white",
+        },
+        {
+          id: 18,
+          src: "/images/shop/products/hmgoepprod17.jpg",
+          alt: "",
+          width: 768,
+          height: 1152,
+          dataValue: "white",
+        },
+      ];
+
+  // 3D modeli statik olarak son fotoğa ekle
+  // Şimdilik her zaman temsili 3D modeli kullan (bizim 3D modelimiz gelene kadar)
+  const model3d = "/images/shop/products/preview_images/dance-bag_3d.glb";
+  const model3dPoster = "/images/shop/products/preview_images/img-3d-1.jpg";
+  
+  // images array'ine 3D modeli her zaman ekle (en sona)
+  if (images && images.length > 0) {
+    images.push({
+      id: images.length + 1,
+      src: model3dPoster,
+      modelSrc: model3d,
+      alt: "3D Model",
       width: 713,
       height: 1070,
-      dataValue: "beige",
-    },
-    {
-      id: 3,
-      src: "/images/shop/products/hmgoepprod2.jpg",
-      alt: "img-compare",
-      width: 713,
-      height: 1070,
-      dataValue: "beige",
-    },
-    {
-      id: 4,
-      src: "/images/shop/products/preview_images/img-3d-1.jpg",
-      modelSrc: "/images/shop/products/preview_images/dance-bag_3d.glb",
-      alt: "img-compare",
-      width: 713,
-      height: 1070,
-      dataValue: "beige",
+      dataValue: currentColor.toLowerCase(),
       is3D: true,
       isModel: true,
-    },
-    {
-      id: 5,
-      src: "/images/shop/products/hmgoepprod4.jpg",
-      alt: "img-compare",
-      width: 768,
-      height: 1152,
-      dataValue: "beige",
-    },
-    {
-      id: 6,
-      src: "/images/shop/products/hmgoepprod5.jpg",
-      alt: "img-compare",
-      width: 713,
-      height: 1070,
-      dataValue: "beige",
-    },
-    {
-      id: 7,
-      src: "/images/shop/products/hmgoepprod6.jpg",
-      alt: "",
-      width: 768,
-      height: 1152,
-      dataValue: "black",
-    },
-    {
-      id: 8,
-      src: "/images/shop/products/hmgoepprod7.jpg",
-      alt: "",
-      width: 713,
-      height: 1070,
-      dataValue: "black",
-    },
-    {
-      id: 9,
-      src: "/images/shop/products/hmgoepprod8.jpg",
-      alt: "",
-      width: 713,
-      height: 1070,
-      dataValue: "black",
-    },
-    {
-      id: 10,
-      src: "/images/shop/products/hmgoepprod9.jpg",
-      alt: "",
-      width: 768,
-      height: 1152,
-      dataValue: "black",
-    },
-    {
-      id: 11,
-      src: "/images/shop/products/hmgoepprod10.jpg",
-      alt: "",
-      width: 713,
-      height: 1070,
-      dataValue: "blue",
-    },
-    {
-      id: 12,
-      src: "/images/shop/products/hmgoepprod11.jpg",
-      alt: "",
-      width: 713,
-      height: 1070,
-      dataValue: "blue",
-    },
-    {
-      id: 13,
-      src: "/images/shop/products/hmgoepprod12.jpg",
-      alt: "",
-      width: 768,
-      height: 1152,
-      dataValue: "blue",
-    },
-    {
-      id: 14,
-      src: "/images/shop/products/hmgoepprod13.jpg",
-      alt: "",
-      width: 768,
-      height: 1152,
-      dataValue: "blue",
-    },
-    {
-      id: 15,
-      src: "/images/shop/products/hmgoepprod14.jpg",
-      alt: "",
-      width: 768,
-      height: 1152,
-      dataValue: "white",
-    },
-    {
-      id: 16,
-      src: "/images/shop/products/hmgoepprod15.jpg",
-      alt: "",
-      width: 768,
-      height: 1152,
-      dataValue: "white",
-    },
-    {
-      id: 17,
-      src: "/images/shop/products/hmgoepprod16.jpg",
-      alt: "",
-      width: 768,
-      height: 1152,
-      dataValue: "white",
-    },
-    {
-      id: 18,
-      src: "/images/shop/products/hmgoepprod17.jpg",
-      alt: "",
-      width: 768,
-      height: 1152,
-      dataValue: "white",
-    },
-  ];
+    });
+  }
+
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const swiperRef = useRef(null);
   useEffect(() => {
@@ -288,7 +329,7 @@ export default function Slider5({
             slide.isModel ? (
               <SwiperSlide className="swiper-slide" key={index}>
                 <div className="item">
-                  <div className="tf-model-viewer">
+                  <div className="tf-model-viewer swiper-no-swiping">
                     <model-viewer
                       reveal="auto"
                       toggleable="true"
@@ -298,7 +339,7 @@ export default function Slider5({
                       data-shopify-feature="1.12"
                       alt={""}
                       poster={slide.src}
-                      className="tf-model-viewer-ui disabled"
+                      className="tf-model-viewer-ui"
                       tabindex="1"
                       data-js-focus-visible=""
                       ar-status="not-presenting"

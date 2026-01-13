@@ -1,6 +1,5 @@
 import Header from "@/components/headers/Header";
-import ShopDefault from "@/components/shop/ShopDefault";
-import Footer from "@/components/footers/Footer";
+import MagazaDisplay from "@/components/shop/MagazaDisplay";
 import { getProducts } from "@/api/products";
 
 export const metadata = {
@@ -8,13 +7,21 @@ export const metadata = {
     description: "Şımart Teknoloji mağaza sayfası, tüm ürünlerimizi keşfedin.",
 };
 
+/**
+ * MagazaPage - Server Component
+ * 
+ * Veriyi sunucu tarafında çeker (SEO dostu) ve 
+ * görselleştirme için MagazaDisplay (Client Component) bileşenine iletir.
+ */
 export default async function MagazaPage() {
-    // Server-side ürünleri çek
+    // Ürünleri sunucu tarafında çek
     const products = await getProducts();
 
     return (
-        <>
+        <main className="magaza-page">
             <Header />
+
+            {/* Sayfa Başlığı */}
             <div className="tf-page-title">
                 <div className="container-full">
                     <div className="heading text-center">Mağaza</div>
@@ -23,8 +30,9 @@ export default async function MagazaPage() {
                     </p>
                 </div>
             </div>
-            <ShopDefault initialProducts={products} />
-            <Footer />
-        </>
+
+            {/* Ürün Listesi (Client Component) */}
+            <MagazaDisplay products={products} />
+        </main>
     );
 }

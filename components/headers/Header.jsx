@@ -89,7 +89,7 @@ export default function Header({
                 <li className="nav-wishlist">
                   <Link href={`/wishlist`} className="nav-icon-item">
                     <i className="icon icon-heart" />
-                    <span className={`count-box ${bgColor} ${textClass}`}>
+                    <span className={`count-box ${bgColor}`}>
                       <WishlistLength />
                     </span>
                   </Link>
@@ -101,7 +101,7 @@ export default function Header({
                     className="nav-icon-item"
                   >
                     <i className="icon icon-bag" />
-                    <span className={`count-box ${bgColor} ${textClass}`}>
+                    <span className={`count-box ${bgColor}`}>
                       <CartLength />
                     </span>
                   </a>

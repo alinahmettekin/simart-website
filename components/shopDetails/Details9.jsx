@@ -48,6 +48,8 @@ export default function Details9({ product }) {
                     handleColor={handleColor}
                     currentColor={currentColor.value}
                     firstImage={product.imgSrc}
+                    galleryImages={product.gallery_images || product.images || []}
+                    model3dUrl={product.model_3d_url}
                   />
                 </div>
               </div>
@@ -72,14 +74,18 @@ export default function Details9({ product }) {
                   </div>
                   <div className="tf-product-info-price">
                     <div className="price-on-sale">
-                      ${product.price.toFixed(2)}
+                      ₺{product.discount_price ? product.discount_price.toLocaleString('tr-TR') : product.price.toLocaleString('tr-TR')}
                     </div>
-                    <div className="compare-at-price">
-                      ${currentColor.oldPrice.toFixed(2)}
-                    </div>
-                    <div className="badges-on-sale">
-                      <span>20</span>% OFF
-                    </div>
+                    {product.discount_price && (
+                      <div className="compare-at-price">
+                        ₺{product.price.toLocaleString('tr-TR')}
+                      </div>
+                    )}
+                    {product.discount_price && (
+                      <div className="badges-on-sale">
+                        <span>{Math.round(((product.price - product.discount_price) / product.price) * 100)}</span>% OFF
+                      </div>
+                    )}
                   </div>
                   <div className="tf-product-info-liveview">
                     <div className="liveview-count">20</div>
@@ -187,12 +193,12 @@ export default function Details9({ product }) {
                         <span>
                           {" "}
                           {isAddedToCartProducts(product.id)
-                            ? "Already Added"
-                            : "Add to cart"}{" "}
+                            ? "Zaten Eklendi"
+                            : "Sepete Ekle"}{" "}
                           -{" "}
                         </span>
                         <span className="tf-qty-price">
-                          ${(product.price * quantity).toFixed(2)}
+                          ₺{((product.discount_price || product.price) * quantity).toLocaleString('tr-TR')}
                         </span>
                       </a>
                       <a

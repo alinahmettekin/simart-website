@@ -1,5 +1,6 @@
 import { serverFetch } from "@/utils/serverFetch";
 import { log} from "@/utils/logger";
+import { ProductModel } from "@/models/Product";
 
 /**
  * Tüm ürünleri veya belirli filtredeki ürünleri getirir.
@@ -14,4 +15,54 @@ export async function getProducts(params = "") {
 
     log("[API products.js] getProducts failed:", response);
     return [];
+}
+
+/**
+ * Belirli bir kategoriye ait ürünleri getirir.
+ * @param {string} categorySlug - Kategori slug'ı (örn: "robotlar")
+ */
+export async function getProductsByCategory(categorySlug) {
+    if (!categorySlug) {
+        log("[API products.js] getProductsByCategory: categorySlug is required");
+        return [];
+    }
+
+    const endpoint = `/products/category/${categorySlug}`;
+    const response = await serverFetch(endpoint, { next: { revalidate: 10 } });
+
+    if (response?.status === "success") {
+        return response.data || [];
+    }
+
+    log("[API products.js] getProductsByCategory failed:", response);
+    return [];
+}
+
+/**
+ * Slug'a göre tek bir ürün getirir ve normalize eder.
+ * @param {string} productSlug - Ürün slug'ı
+ * @returns {Promise<Product|null>} Normalize edilmiş ürün objesi veya null
+ */
+export async function getProductBySlug(productSlug) {
+    if (!productSlug) {
+        log("[API products.js] getProductBySlug: productSlug is required");
+        return null;
+    }
+
+    const endpoint = `/products/${productSlug}`;
+    const response = await serverFetch(endpoint, { next: { revalidate: 10 } });
+
+    if (response?.status === "success" && response.data) {
+        try {
+            // API'den gelen veriyi normalize et
+            return ProductModel.normalize(response.data);
+        } catch (error) {
+            log("[API products.js] getProductBySlug normalization error:", error);
+            // Normalize hatası olsa bile ham veriyi döndür
+            return response.data;
+        }
+    }
+
+    log("[API products.js] getProductBySlug failed:", response);
+    return null;
 }

@@ -20,12 +20,10 @@ export default function ProductGrid({
         {allproducts.length} product(s) found
       </div>
       {gridItems == 1 ? (
-        <div className="grid-layout" data-grid="grid-list">
-          {/* card product 1 */}
+        <div className="grid-layout list-view" data-grid="grid-list">
           {allproducts.map((elm, i) => (
-            <Productcard23 product={elm} key={i} />
+            <ProductCardSimart product={elm} key={i} />
           ))}
-          {/* card product 2 */}
         </div>
       ) : (
         <div
