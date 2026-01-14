@@ -23,7 +23,6 @@ import ToolbarShop from "@/components/modals/ToolbarShop";
 import NewsletterModal from "@/components/modals/NewsletterModal";
 import ShareModal from "@/components/modals/ShareModal";
 import ScrollTop from "@/components/common/ScrollTop";
-import RtlToggle from "@/components/common/RtlToggle";
 
 export default function ClientLayout({ children }) {
     const pathname = usePathname();
@@ -97,26 +96,17 @@ export default function ClientLayout({ children }) {
     }, [pathname]);
 
     useEffect(() => {
-        const initializeDirection = () => {
-            const direction = localStorage.getItem("direction");
-            if (direction) {
-                const parsedDirection = JSON.parse(direction);
-                document.documentElement.dir = parsedDirection.dir;
-                document.body.classList.add(parsedDirection.dir);
-            } else {
-                document.documentElement.dir = "ltr";
-            }
-
-            const preloader = document.getElementById("preloader");
-            if (preloader) preloader.classList.add("disabled");
-        };
-        initializeDirection();
+        // Her zaman LTR kullan
+        document.documentElement.dir = "ltr";
+        document.body.classList.remove("rtl");
+        
+        const preloader = document.getElementById("preloader");
+        if (preloader) preloader.classList.add("disabled");
     }, []);
 
     return (
         <Context>
             <div id="wrapper">{children}</div>
-            <RtlToggle />
             <HomesModal />
             <QuickView />
             <QuickAdd />

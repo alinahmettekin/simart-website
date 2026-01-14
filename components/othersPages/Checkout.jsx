@@ -9,14 +9,14 @@ export default function Checkout() {
       <div className="container">
         <div className="tf-page-cart-wrap layout-2">
           <div className="tf-page-cart-item">
-            <h5 className="fw-5 mb_20">Billing details</h5>
+            <h5 className="fw-5 mb_20">Ödeme Bilgileri</h5>
             <form
               onSubmit={(e) => e.preventDefault()}
               className="form-checkout"
             >
               <div className="box grid-2">
                 <fieldset className="fieldset">
-                  <label htmlFor="first-name">First Name</label>
+                  <label htmlFor="first-name">Adınız</label>
                   <input
                     required
                     type="text"
@@ -25,12 +25,12 @@ export default function Checkout() {
                   />
                 </fieldset>
                 <fieldset className="fieldset">
-                  <label htmlFor="last-name">Last Name</label>
+                  <label htmlFor="last-name">Soyadınız</label>
                   <input required type="text" id="last-name" />
                 </fieldset>
               </div>
               <fieldset className="box fieldset">
-                <label htmlFor="country">Country/Region</label>
+                <label htmlFor="country">Ülke/Bölge</label>
                 <div className="select-custom">
                   <select
                     required
@@ -175,19 +175,19 @@ export default function Checkout() {
                 </div>
               </fieldset>
               <fieldset className="box fieldset">
-                <label htmlFor="city">Town/City</label>
+                <label htmlFor="city">Şehir</label>
                 <input required type="text" id="city" />
               </fieldset>
               <fieldset className="box fieldset">
-                <label htmlFor="address">Address</label>
+                <label htmlFor="address">Adres</label>
                 <input required type="text" id="address" />
               </fieldset>
               <fieldset className="box fieldset">
-                <label htmlFor="phone">Phone Number</label>
+                <label htmlFor="phone">Telefon Numarası</label>
                 <input required type="number" id="phone" />
               </fieldset>
               <fieldset className="box fieldset">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">E-posta</label>
                 <input
                   required
                   type="email"
@@ -196,14 +196,14 @@ export default function Checkout() {
                 />
               </fieldset>
               <fieldset className="box fieldset">
-                <label htmlFor="note">Order notes (optional)</label>
+                <label htmlFor="note">Sipariş notu (isteğe bağlı)</label>
                 <textarea name="note" id="note" defaultValue={""} />
               </fieldset>
             </form>
           </div>
           <div className="tf-page-cart-footer">
             <div className="tf-cart-footer-inner">
-              <h5 className="fw-5 mb_20">Your order</h5>
+              <h5 className="fw-5 mb_20">Sipariş Bilgileri</h5>
               <form
                 onSubmit={(e) => e.preventDefault()}
                 className="tf-page-cart-checkout widget-wrap-checkout"
@@ -236,7 +236,7 @@ export default function Checkout() {
                   <div className="container">
                     <div className="row align-items-center mt-5 mb-5">
                       <div className="col-12 fs-18">
-                        Your shop cart is empty
+                        Sepetiniz boş
                       </div>
                       <div className="col-12 mt-3">
                         <Link
@@ -244,24 +244,24 @@ export default function Checkout() {
                           className="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"
                           style={{ width: "fit-content" }}
                         >
-                          Explore Products!
+                            Ürünleri Keşfet
                         </Link>
                       </div>
                     </div>
                   </div>
                 )}
                 <div className="coupon-box">
-                  <input required type="text" placeholder="Discount code" />
+                  <input required type="text" placeholder="İndirim Kodu" />
                   <a
                     href="#"
                     className="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn"
                   >
-                    Apply
+                    Uygula
                   </a>
                 </div>
                 <div className="d-flex justify-content-between line pb_20">
-                  <h6 className="fw-5">Total</h6>
-                  <h6 className="total fw-5">$122.00</h6>
+                  <h6 className="fw-5">Toplam</h6>
+                  <h6 className="total fw-5">{totalPrice.toFixed(2)} ₺</h6>
                 </div>
                 <div className="wd-check-payment">
                   <div className="fieldset-radio mb_20">
@@ -273,7 +273,7 @@ export default function Checkout() {
                       className="tf-check"
                       defaultChecked
                     />
-                    <label htmlFor="bank">Direct bank transfer</label>
+                    <label htmlFor="bank">Doğrudan banka transfer</label>
                   </div>
                   <div className="fieldset-radio mb_20">
                     <input
@@ -283,19 +283,10 @@ export default function Checkout() {
                       id="delivery"
                       className="tf-check"
                     />
-                    <label htmlFor="delivery">Cash on delivery</label>
+                    <label htmlFor="delivery">Nakit teslimat</label>
                   </div>
                   <p className="text_black-2 mb_20">
-                    Your personal data will be used to process your order,
-                    support your experience throughout this website, and for
-                    other purposes described in our
-                    <Link
-                      href={`/privacy-policy`}
-                      className="text-decoration-underline"
-                    >
-                      privacy policy
-                    </Link>
-                    .
+                    Kişisel verileriniz siparişinizi işlemek için kullanılacak, bu web sitesinde deneyiminizi desteklemek ve diğer amaçlar için kullanılacaktır.
                   </p>
                   <div className="box-checkbox fieldset-radio mb_20">
                     <input
@@ -305,19 +296,13 @@ export default function Checkout() {
                       className="tf-check"
                     />
                     <label htmlFor="check-agree" className="text_black-2">
-                      I have read and agree to the website
-                      <Link
-                        href={`/terms-conditions`}
-                        className="text-decoration-underline"
-                      >
-                        terms and conditions
-                      </Link>
-                      .
+                        <Link href={`/terms-conditions`}>Şartları ve Koşulları</Link>
+                        {" "}kabul ediyorum
                     </label>
                   </div>
                 </div>
                 <button className="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">
-                  Place order
+                  Sipariş Ver
                 </button>
               </form>
             </div>

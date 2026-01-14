@@ -32,7 +32,7 @@ export default function ShopCart() {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="header">
-            <div className="title fw-5">Shopping cart</div>
+            <div className="title fw-5">Sepet</div>
             <span
               className="icon-close icon-close-popup"
               data-bs-dismiss="modal"
@@ -60,8 +60,7 @@ export default function ShopCart() {
                 </span>
               </div>
               <div className="tf-progress-msg">
-                Buy <span className="price fw-6">$75.00</span> more to enjoy
-                <span className="fw-6">Free Shipping</span>
+                <span className="fw-6">Ücretsiz kargo</span>
               </div>
             </div>
             <div className="tf-mini-cart-wrap">
@@ -125,7 +124,7 @@ export default function ShopCart() {
                               style={{ cursor: "pointer" }}
                               onClick={() => removeItem(elm.id)}
                             >
-                              Remove
+                              Kaldır
                             </div>
                           </div>
                         </div>
@@ -136,7 +135,7 @@ export default function ShopCart() {
                       <div className="container">
                         <div className="row align-items-center mt-5 mb-5">
                           <div className="col-12 fs-18">
-                            Your shop cart is empty
+                            Sepetiniz boş
                           </div>
                           <div className="col-12 mt-3">
                             <Link
@@ -144,7 +143,7 @@ export default function ShopCart() {
                               className="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"
                               style={{ width: "fit-content" }}
                             >
-                              Explore Products!
+                              Ürünleri Keşfet!
                             </Link>
                           </div>
                         </div>
@@ -154,7 +153,7 @@ export default function ShopCart() {
                   <div className="tf-minicart-recommendations">
                     <div className="tf-minicart-recommendations-heading">
                       <div className="tf-minicart-recommendations-title">
-                        You may also like
+                        Şunları da beğenebilirsiniz
                       </div>
                       <div className="sw-dots small style-2 cart-slide-pagination spdsc1" />
                     </div>
@@ -265,14 +264,12 @@ export default function ShopCart() {
                 </div>
                 <div className="tf-mini-cart-bottom-wrap">
                   <div className="tf-cart-totals-discounts">
-                    <div className="tf-cart-total">Subtotal</div>
+                    <div className="tf-cart-total">Toplam</div>
                     <div className="tf-totals-total-value fw-6">
-                      ${totalPrice.toFixed(2)} USD
+                      {totalPrice.toFixed(2)} ₺
                     </div>
                   </div>
-                  <div className="tf-cart-tax">
-                    Taxes and <a href="#">shipping</a> calculated at checkout
-                  </div>
+                  
                   <div className="tf-mini-cart-line" />
                   <div className="tf-cart-checkbox">
                     <div className="tf-checkbox-wrapp">
@@ -287,24 +284,25 @@ export default function ShopCart() {
                       </div>
                     </div>
                     <label htmlFor="CartDrawer-Form_agree">
-                      I agree with the
+                      
                       <a href="#" title="Terms of Service">
-                        terms and conditions
+                        Şartları ve Koşulları <br />
                       </a>
+                      {" "}kabul ediyorum
                     </label>
                   </div>
                   <div className="tf-mini-cart-view-checkout">
                     <Link
-                      href={`/view-cart`}
+                      href={`/sepetim`}
                       className="tf-btn btn-outline radius-3 link w-100 justify-content-center"
                     >
-                      View cart
+                      Sepeti Görüntüle
                     </Link>
                     <Link
-                      href={`/checkout`}
+                      href={`/odeme`}
                       className="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"
                     >
-                      <span>Check out</span>
+                      <span>Sipariş ver</span>
                     </Link>
                   </div>
                 </div>
@@ -331,12 +329,12 @@ export default function ShopCart() {
                         <path d="M15.3882 10.0971C14.5724 9.28136 13.2452 9.28132 12.43 10.0965L8.60127 13.9168C8.51997 13.9979 8.45997 14.0979 8.42658 14.2078L7.59276 16.9528C7.55646 17.0723 7.55292 17.1993 7.58249 17.3207C7.61206 17.442 7.67367 17.5531 7.76087 17.6425C7.84807 17.7319 7.95768 17.7962 8.07823 17.8288C8.19879 17.8613 8.32587 17.8609 8.44621 17.8276L11.261 17.0479C11.3769 17.0158 11.4824 16.9543 11.5675 16.8694L15.3882 13.0559C16.2039 12.2401 16.2039 10.9129 15.3882 10.0971ZM10.712 15.7527L9.29586 16.145L9.71028 14.7806L12.2937 12.2029L13.2801 13.1893L10.712 15.7527ZM14.4025 12.0692L14.2673 12.204L13.2811 11.2178L13.4157 11.0834C13.6876 10.8115 14.1301 10.8115 14.402 11.0834C14.6739 11.3553 14.6739 11.7977 14.4025 12.0692Z" />
                       </svg>
                     </div>
-                    <span>Add Order Note</span>
+                    <span>Sipariş Notu Ekle</span>
                   </label>
                   <textarea
                     name="note"
                     id="Cart-note"
-                    placeholder="How can we help you?"
+                    placeholder="Nasıl yardımcı olabiliriz?"
                     defaultValue={""}
                   />
                   <div className="tf-cart-tool-btns justify-content-center">
@@ -346,7 +344,7 @@ export default function ShopCart() {
                         addNoteRef.current.classList.remove("open")
                       }
                     >
-                      Close
+                      Kapat
                     </div>
                   </div>
                 </div>
@@ -381,9 +379,9 @@ export default function ShopCart() {
                         </svg>
                       </div>
                       <div className="tf-gift-wrap-infos">
-                        <p>Do you want a gift wrap?</p>
-                        Only
-                        <span className="price fw-6">$5.00</span>
+                        <p>Hediye ambalajı ister misiniz?</p>
+                        Sadece
+                        <span className="price fw-6"> ₺5.00</span>
                       </div>
                     </div>
                     <div className="tf-cart-tool-btns">
@@ -391,7 +389,7 @@ export default function ShopCart() {
                         type="submit"
                         className="tf-btn fw-6 w-100 justify-content-center btn-fill animate-hover-btn radius-3"
                       >
-                        <span>Add a gift wrap</span>
+                        <span>Hediye ambalajı ekle</span>
                       </button>
                       <div
                         className="tf-mini-cart-tool-primary text-center w-100 fw-6 tf-mini-cart-tool-close"
@@ -399,7 +397,7 @@ export default function ShopCart() {
                           addGiftRef.current.classList.remove("open")
                         }
                       >
-                        Cancel
+                        Kapat
                       </div>
                     </div>
                   </div>
@@ -430,10 +428,10 @@ export default function ShopCart() {
                         />
                       </svg>
                     </div>
-                    <span className="fw-6">Estimate Shipping</span>
+                    <span className="fw-6">Kargo Tahmini</span>
                   </div>
                   <div className="field">
-                    <p>Country</p>
+                    <p>Şehir</p>
                     <select
                       className="tf-select w-100"
                       id="ShippingCountry_CartDrawer-Form"
@@ -574,10 +572,7 @@ export default function ShopCart() {
                       </option>
                     </select>
                   </div>
-                  <div className="field">
-                    <p>Zip code</p>
-                    <input type="text" name="text" placeholder="" />
-                  </div>
+                  
                   <div className="tf-cart-tool-btns">
                     <a
                       href="#"

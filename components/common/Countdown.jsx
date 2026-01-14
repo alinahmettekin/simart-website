@@ -45,7 +45,7 @@ const renderer2 = ({ days, hours, minutes, seconds, completed }) => {
 export default function CountdownComponent({
   fullLabel = false,
   labels,
-  targetDate = "2025-6-07",
+  targetDate = "2026-12-25",
   upperCase = false,
 }) {
   const [showCountdown, setShowCountdown] = useState(false);
@@ -151,8 +151,8 @@ export default function CountdownComponent({
               targetDate
                 ? targetDate
                 : new Date().setDate(
-                    new Date().getDate() + Math.floor(Math.random() * 100)
-                  )
+                  new Date().getDate() + Math.floor(Math.random() * 100)
+                )
             )
           }
           renderer={fullLabel ? renderer2 : upperCase ? renderer3 : renderer}

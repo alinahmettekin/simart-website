@@ -138,6 +138,7 @@ export default function ProductCardSimart({ product }) {
                     display: flex;
                     flex-direction: column;
                     height: 100%;
+                    min-height: 400px;
                     background: #fff;
                     border: 1px solid #e0e0e0;
                     border-radius: 20px;
@@ -148,6 +149,7 @@ export default function ProductCardSimart({ product }) {
                 .card-image-area {
                     overflow: hidden;
                     border-radius: 20px 20px 0 0;
+                    flex-shrink: 0;
                 }
 
                 .card-content-area {
@@ -155,13 +157,43 @@ export default function ProductCardSimart({ product }) {
                     flex-direction: column;
                     flex: 1;
                     padding: 12px;
+                    min-height: 0;
+                    justify-content: flex-end;
                 }
 
                 /* Hizalama Slotları */
-                .title-slot { height: 40px; margin-bottom: 4px; overflow: hidden; }
-                .rating-slot { height: 20px; margin-bottom: 8px; display: flex; align-items: center; }
-                .price-slot { height: 24px; margin-bottom: 12px; display: flex; align-items: center; }
-                .button-row { margin-top: auto; display: flex; gap: 8px; align-items: center; }
+                .title-slot { 
+                    height: 40px; 
+                    margin-bottom: 4px; 
+                    overflow: hidden; 
+                    flex-shrink: 0;
+                }
+                .rating-slot { 
+                    height: 20px; 
+                    margin-bottom: 8px; 
+                    display: flex; 
+                    align-items: center; 
+                    flex-shrink: 0;
+                }
+                .price-slot { 
+                    height: 24px; 
+                    margin-bottom: 12px; 
+                    display: flex; 
+                    align-items: center; 
+                    flex-shrink: 0;
+                }
+                .button-row { 
+                    display: flex; 
+                    gap: 8px; 
+                    align-items: center; 
+                    width: 100%;
+                    flex-shrink: 0;
+                }
+                .button-row .flex-grow-1 {
+                    flex: 1;
+                    min-width: 0;
+                    display: flex;
+                }
 
                 /* Metin Stilleri */
                 .product-title {
@@ -188,12 +220,48 @@ export default function ProductCardSimart({ product }) {
                     border-radius: 999px !important;
                     font-size: 13px !important;
                     font-weight: 600 !important;
+                    white-space: nowrap !important;
+                    overflow: hidden !important;
+                    text-overflow: ellipsis !important;
+                    align-items: center !important;
+                    padding-left: 16px !important;
+                    padding-right: 16px !important;
+                    display: flex !important;
+                    /* Tablet ve mobilde soldan, desktop'ta ortadan */
+                    text-align: left !important;
+                    justify-content: flex-start !important;
+                }
+                :global(.main-cart-btn span) {
+                    white-space: nowrap !important;
+                    overflow: hidden !important;
+                    text-overflow: ellipsis !important;
+                    display: block !important;
+                    width: 100% !important;
+                    flex: 1;
+                    min-width: 0;
+                    /* Tablet ve mobilde soldan, desktop'ta ortadan */
+                    text-align: left !important;
+                }
+                
+                /* Desktop'ta ortadan başla (992px ve üzeri) */
+                @media (min-width: 992px) {
+                    :global(.main-cart-btn) {
+                        text-align: center !important;
+                        justify-content: center !important;
+                    }
+                    :global(.main-cart-btn span) {
+                        text-align: center !important;
+                    }
                 }
                 
                 .wish-action-btn {
                     position: relative;
                     width: 44px;
                     height: 44px;
+                    min-width: 44px;
+                    min-height: 44px;
+                    max-width: 44px;
+                    max-height: 44px;
                     border-radius: 50%;
                     border: 1px solid #ddd;
                     background: #fff;
@@ -202,8 +270,14 @@ export default function ProductCardSimart({ product }) {
                     justify-content: center;
                     cursor: pointer;
                     transition: 0.2s;
+                    flex-shrink: 0;
+                    padding: 0;
                 }
                 .wish-action-btn:hover { background: #000; color: #fff; border-color: #000; }
+                .wish-action-btn i {
+                    font-size: 18px;
+                    line-height: 1;
+                }
                 
                 /* Tooltip (Kesilmeyen Yapı) */
                 .action-tooltip {
@@ -227,6 +301,32 @@ export default function ProductCardSimart({ product }) {
                 @media (max-width: 768px) {
                     .card-content-area { padding: 10px; }
                     .price-slot { margin-bottom: 8px; }
+                    .button-row { gap: 6px; }
+                    .wish-action-btn {
+                        width: 40px;
+                        height: 40px;
+                        min-width: 40px;
+                        min-height: 40px;
+                        max-width: 40px;
+                        max-height: 40px;
+                    }
+                    .wish-action-btn i {
+                        font-size: 16px;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .button-row { gap: 4px; }
+                    .wish-action-btn {
+                        width: 36px;
+                        height: 36px;
+                        min-width: 36px;
+                        min-height: 36px;
+                        max-width: 36px;
+                        max-height: 36px;
+                    }
+                    .wish-action-btn i {
+                        font-size: 14px;
+                    }
                 }
             `}</style>
         </div>

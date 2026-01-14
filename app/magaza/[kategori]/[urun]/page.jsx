@@ -33,7 +33,7 @@ export async function generateMetadata({ params }) {
 
 export default async function page({ params }) {
     const { kategori, urun } = await params;
-    
+
     if (!urun) {
         notFound();
     }
@@ -52,7 +52,7 @@ export default async function page({ params }) {
                     <div className="tf-breadcrumb-wrap d-flex justify-content-between flex-wrap align-items-center">
                         <div className="tf-breadcrumb-list">
                             <Link href={`/`} className="text">
-                                Home
+                                Mağaza
                             </Link>
 
                             <i className="icon icon-arrow-right" />
@@ -62,7 +62,6 @@ export default async function page({ params }) {
                             <i className="icon icon-arrow-right" />
                             <span className="text">{product.name || product.title}</span>
                         </div>
-                        <ProductSinglePrevNext currentId={product.id} />
                     </div>
                 </div>
             </div>
@@ -70,7 +69,6 @@ export default async function page({ params }) {
             <ShopDetailsTab />
             <Products />
             <RecentProducts />
-            <Footer />
         </>
     );
 }

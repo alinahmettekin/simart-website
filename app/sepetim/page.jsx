@@ -12,12 +12,6 @@ export default function page() {
   return (
     <>
       <Header />
-      <div className="tf-page-title">
-        <div className="container-full">
-          <div className="heading text-center">Shopping Cart</div>
-        </div>
-      </div>
-
       <Cart />
       <Testimonials />
       <RecentProducts />
