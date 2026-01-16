@@ -11,19 +11,25 @@ import Testimonials from "@/components/homes/home-electronic/Testimonials";
 import React, { cache } from "react";
 import { getCategories, getBanners, getCollectionBanner, getCollections } from "@/api/home";
 import { getMenus } from "@/api/menus";
-import { log } from "@/utils/logger";
+import { siteConfig } from "@/config/site";
+import { organizationSchema } from "@/lib/schema";
+
+const schema = organizationSchema();
 
 export const metadata = {
   title: "Şımart Teknoloji - Robot Süpürge ve Akıllı Ev Sistemleri",
-  description: "Şımart Teknoloji, robot süpürgeler, akıllı ev sistemleri ve IoT çözümlerinde öncüdür. Ev otomasyonu ve yaşamı kolaylaştıran teknolojilerle hizmetinizdeyiz.",
+  description:
+    "Şımart Teknoloji, robot süpürgeler, akıllı ev sistemleri ve IoT çözümlerinde öncüdür. Ev otomasyonu ve yaşamı kolaylaştıran teknolojilerle hizmetinizdeyiz.",
+  base: siteConfig.site.url,
+  other: {
+    "script:ld+json": JSON.stringify(schema),
+  },
 };
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  log("[Home] Starting parallel data fetch via API services...");
-
-  const [menuItems, banners, categories,  collectionBanner, collections] = await Promise.all([
+  const [menuItems, banners, categories, collectionBanner, collections] = await Promise.all([
     getMenus(),
     getBanners(),
     getCategories(),
@@ -32,20 +38,18 @@ export default async function Home() {
   ]);
 
   return (
-    <>
-      <div className="color-primary-15">
-        <Header textClass={"text-black"} menuItems={menuItems} />
-        <Hero banners={banners} />
-        {/* <Marquee /> */}
-        <Categories categories={categories} />
-        <CollectionBanner banner={collectionBanner} />
-        <Collections collections={collections} />
-        {/* <Countdown /> */}
-        <Products />
-        <Testimonials />
-        <Blogs />
-        <Features />
-      </div>
-    </>
+    <div className="color-primary-15">
+      <Header textClass={"text-black"} menuItems={menuItems} />
+      <Hero banners={banners} />
+      {/* <Marquee /> */}
+      <Categories categories={categories} />
+      <CollectionBanner banner={collectionBanner} />
+      <Collections collections={collections} />
+      {/* <Countdown /> */}
+      <Products />
+      <Testimonials />
+      <Blogs />
+      <Features />
+    </div>
   );
 }

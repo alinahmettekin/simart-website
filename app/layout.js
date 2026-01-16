@@ -8,10 +8,16 @@ import Topbar from "@/components/headers/Topbar";
 import { getTopbar } from "@/api/home";
 import { getFooterMenus } from "@/api/menus";
 import Footer from "@/components/footers/Footer";
+import { siteConfig } from "@/config/site";
 
 export const metadata = {
-  title: "Şımart Teknoloji - Robot Süpürge ve Akıllı Ev Sistemleri",
-  description: "Şımart Teknoloji, robot süpürgeler, akıllı ev sistemleri ve IoT çözümlerinde öncüdür. Ev otomasyonu ve yaşamı kolaylaştıran teknolojilerle hizmetinizdeyiz.",
+  title: siteConfig.site.title,
+  description: siteConfig.site.description,
+  keywords: siteConfig.site.keywords,
+  author: siteConfig.site.author,
+  og: siteConfig.site.og,
+  twitter: siteConfig.site.twitter,
+  itemprop: siteConfig.site.itemprop,
 };
 
 export default async function RootLayout({ children }) {
@@ -23,6 +29,20 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="tr">
+      <head>
+        {/* Google reCaptcha */}
+        <script src="https://www.google.com/recaptcha/api.js" async></script>
+        {/* Google Analytics */}
+        {/* <script src="https://www.googletagmanager.com/gtag/js?id=G-GQP4JCTH72" async></script> */}
+        {/* <script id="ga-init">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-GQP4JCTH72');
+          `}
+        </script> */}
+      </head>
       <body className="preload-wrapper">
         <div className="preload preload-container" id="preloader">
           <div className="preload-logo">

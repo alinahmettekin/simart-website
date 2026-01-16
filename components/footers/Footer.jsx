@@ -3,8 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
-import LanguageSelect from "../common/LanguageSelect";
-import CurrencySelect from "../common/CurrencySelect";
 
 import { paymentImages } from "@/data/footerLinks";
 export default function Footer({ bgColor = "", footerMenus = null }) {
@@ -45,12 +43,9 @@ export default function Footer({ bgColor = "", footerMenus = null }) {
     const email = e.target.email.value;
 
     try {
-      const response = await axios.post(
-        "https://express-brevomail.vercel.app/api/contacts",
-        {
-          email,
-        }
-      );
+      const response = await axios.post("https://express-brevomail.vercel.app/api/contacts", {
+        email,
+      });
 
       if ([200, 201].includes(response.status)) {
         e.target.reset(); // Reset the form
@@ -78,19 +73,13 @@ export default function Footer({ bgColor = "", footerMenus = null }) {
                 <div className="footer-infor">
                   <div className="footer-logo">
                     <Link href={`/`}>
-                      <Image
-                        alt="image"
-                        src="/images/logo/logo.png"
-                        width="136"
-                        height="21"
-                      />
+                      <Image alt="image" src="/images/logo/logo.png" width="136" height="21" />
                     </Link>
                   </div>
                   <ul>
                     <li>
                       <p>
-                        Adres: Yeşilova Mah. 4023 Cad. <br /> Ser Tower Apt.  Dış Kapı: 1 G
-                        Etimesgut/Ankara
+                        Adres: Yeşilova Mah. 4023 Cad. <br /> Ser Tower Apt. Dış Kapı: 1 G Etimesgut/Ankara
                       </p>
                     </li>
                     <li>
@@ -110,42 +99,27 @@ export default function Footer({ bgColor = "", footerMenus = null }) {
                   </Link>
                   <ul className="tf-social-icon d-flex gap-10">
                     <li>
-                      <a
-                        href="#"
-                        className="box-icon w_34 round social-facebook social-line"
-                      >
+                      <a href="#" className="box-icon w_34 round social-facebook social-line">
                         <i className="icon fs-14 icon-fb" />
                       </a>
                     </li>
                     <li>
-                      <a
-                        href="#"
-                        className="box-icon w_34 round social-twiter social-line"
-                      >
+                      <a href="#" className="box-icon w_34 round social-twiter social-line">
                         <i className="icon fs-12 icon-Icon-x" />
                       </a>
                     </li>
                     <li>
-                      <a
-                        href="#"
-                        className="box-icon w_34 round social-instagram social-line"
-                      >
+                      <a href="#" className="box-icon w_34 round social-instagram social-line">
                         <i className="icon fs-14 icon-instagram" />
                       </a>
                     </li>
                     <li>
-                      <a
-                        href="#"
-                        className="box-icon w_34 round social-tiktok social-line"
-                      >
+                      <a href="#" className="box-icon w_34 round social-tiktok social-line">
                         <i className="icon fs-14 icon-tiktok" />
                       </a>
                     </li>
                     <li>
-                      <a
-                        href="#"
-                        className="box-icon w_34 round social-pinterest social-line"
-                      >
+                      <a href="#" className="box-icon w_34 round social-pinterest social-line">
                         <i className="icon fs-14 icon-pinterest-1" />
                       </a>
                     </li>
@@ -153,31 +127,30 @@ export default function Footer({ bgColor = "", footerMenus = null }) {
                 </div>
               </div>
               {/* Footer menüleri - slug'a göre dinamik olarak render edilir */}
-              {Array.isArray(footerMenus) && footerMenus.map((menu) => (
-                menu?.items && menu.items.length > 0 && (
-                  <div key={menu.id || menu.slug} className="col-xl-3 col-md-6 col-12 footer-col-block">
-                    <div className="footer-heading footer-heading-desktop">
-                      <h6>{menu.name}</h6>
-                    </div>
-                    <div className="footer-heading footer-heading-moblie">
-                      <h6>{menu.name}</h6>
-                    </div>
-                    <ul className="footer-menu-list tf-collapse-content">
-                      {menu.items.map((item) => (
-                        <li key={item.id}>
-                          <Link 
-                            href={item.url || "#"} 
-                            className="footer-menu_item"
-                            target={item.target || "_self"}
-                          >
-                            {item.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )
-              ))}
+              {Array.isArray(footerMenus) &&
+                footerMenus.map(
+                  (menu) =>
+                    menu?.items &&
+                    menu.items.length > 0 && (
+                      <div key={menu.id || menu.slug} className="col-xl-3 col-md-6 col-12 footer-col-block">
+                        <div className="footer-heading footer-heading-desktop">
+                          <h6>{menu.name}</h6>
+                        </div>
+                        <div className="footer-heading footer-heading-moblie">
+                          <h6>{menu.name}</h6>
+                        </div>
+                        <ul className="footer-menu-list tf-collapse-content">
+                          {menu.items.map((item) => (
+                            <li key={item.id}>
+                              <Link href={item.url || "#"} className="footer-menu_item" target={item.target || "_self"}>
+                                {item.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )
+                )}
               <div className="col-xl-3 col-md-6 col-12">
                 <div className="footer-newsletter footer-col-block">
                   <div className="footer-heading footer-heading-desktop">
@@ -190,14 +163,9 @@ export default function Footer({ bgColor = "", footerMenus = null }) {
                     <div className="footer-menu_item">
                       Yeni gelişmeler, indirimler, özel içeriğe, etkinliklere ve daha fazlasına erişim için abone olun!
                     </div>
-                    <div
-                      className={`tfSubscribeMsg ${showMessage ? "active" : ""
-                        }`}
-                    >
+                    <div className={`tfSubscribeMsg ${showMessage ? "active" : ""}`}>
                       {success ? (
-                        <p style={{ color: "rgb(52, 168, 83)" }}>
-                          Başarıyla abone oldunuz.
-                        </p>
+                        <p style={{ color: "rgb(52, 168, 83)" }}>Başarıyla abone oldunuz.</p>
                       ) : (
                         <p style={{ color: "red" }}>Bir hata oluştu</p>
                       )}
@@ -247,18 +215,10 @@ export default function Footer({ bgColor = "", footerMenus = null }) {
             <div className="row">
               <div className="col-12">
                 <div className="footer-bottom-wrap d-flex gap-20 flex-wrap justify-content-between align-items-center">
-                  <div className="footer-menu_item">
-                    © 2020 Şımart Teknoloji. Tüm Hakları Saklıdır.
-                  </div>
+                  <div className="footer-menu_item">© 2020 Şımart Teknoloji. Tüm Hakları Saklıdır.</div>
                   <div className="tf-payment">
                     {paymentImages.map((image, index) => (
-                      <Image
-                        key={index}
-                        src={image.src}
-                        width={image.width}
-                        height={image.height}
-                        alt={image.alt}
-                      />
+                      <Image key={index} src={image.src} width={image.width} height={image.height} alt={image.alt} />
                     ))}
                   </div>
                 </div>

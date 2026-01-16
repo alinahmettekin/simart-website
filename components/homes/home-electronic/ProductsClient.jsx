@@ -7,11 +7,6 @@ import ProductCardSimart from "@/components/shopCards/ProductCardSimart";
 export default function ProductsClient({ products = [] }) {
     const displayProducts = Array.isArray(products) ? products : []; // Sadece API'den gelen ürünler
 
-    // Debug: Ürün sayısını kontrol et
-    console.log("[ProductsClient] products:", products);
-    console.log("[ProductsClient] displayProducts length:", displayProducts.length);
-    console.log("[ProductsClient] displayProducts:", displayProducts);
-
     return (
         <section className="flat-spacing-19">
             <div className="container">

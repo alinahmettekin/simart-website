@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { useCartStore } from "@/stores/cartStore";
+import { getCart } from "@/api/cart";
 import HomesModal from "@/components/modals/HomesModal";
 import Context from "@/context/Context";
 import QuickView from "@/components/modals/QuickView";
@@ -28,6 +30,8 @@ export default function ClientLayout({ children }) {
     const pathname = usePathname();
     const lastScrollY = useRef(0);
     const [scrollDirection, setScrollDirection] = useState("down");
+    const syncFromAPI = useCartStore((state) => state.syncFromAPI);
+    const isSynced = useCartStore((state) => state.isSynced);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -103,6 +107,23 @@ export default function ClientLayout({ children }) {
         const preloader = document.getElementById("preloader");
         if (preloader) preloader.classList.add("disabled");
     }, []);
+
+    // Cart'ı API'den sync et (sadece ilk yüklemede)
+    useEffect(() => {
+        if (typeof window !== "undefined" && !isSynced) {
+            const fetchCart = async () => {
+                try {
+                    const cartData = await getCart();
+                    if (cartData) {
+                        syncFromAPI(cartData);
+                    }
+                } catch (error) {
+                    console.error("[ClientLayout] Cart sync error:", error);
+                }
+            };
+            fetchCart();
+        }
+    }, [isSynced, syncFromAPI]);
 
     return (
         <Context>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import apiClient from "@/utils/apiClient";
+import { log } from "@/utils/logger";
 import { ProductCard } from "../shopCards/ProductCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -26,9 +27,17 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "", menuI
           const response = await apiClient.get("/menus?type=header-menu");
           if (response.data?.status === "success" && Array.isArray(response.data.data?.items)) {
             setMenuItems(response.data.data.items);
+          } else {
+            log("[Nav.jsx] Menu API response invalid:", response?.data);
           }
         } catch (error) {
-          console.error("Failed to fetch menu on client:", error);
+          log("[Nav.jsx] Failed to fetch menu:", {
+            message: error.message,
+            status: error.response?.status,
+            statusText: error.response?.statusText,
+            url: error.config?.url,
+          });
+          // Hata durumunda menuItems boş kalır, bu yüzden render edilmez
         }
       };
       fetchMenu();
@@ -65,19 +74,20 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "", menuI
   return (
     <>
       {menuItems.map((item, index) => {
-        const isProductsMenu = item.title === "Ürünler" || item.title === "Products" || item.css_class?.includes("mega-menu");
+        const isProductsMenu =
+          item.title === "Ürünler" || item.title === "Products" || item.css_class?.includes("mega-menu");
 
         return (
           <li key={index} className={`menu-item ${isProductsMenu ? "" : "position-relative"}`}>
             <Link
               href={item.url || "#"}
               target={item.target || "_self"}
-              className={`item-link ${Linkfs} ${textColor} ${isMenuActive(item) ? "activeMenu" : ""} ${item.css_class || ""}`}
+              className={`item-link ${Linkfs} ${textColor} ${isMenuActive(item) ? "activeMenu" : ""} ${
+                item.css_class || ""
+              }`}
             >
               {item.title}
-              {item.children?.length > 0 && isArrow && (
-                <i className="icon icon-arrow-down" />
-              )}
+              {item.children?.length > 0 && isArrow && <i className="icon icon-arrow-down" />}
             </Link>
 
             {item.children?.length > 0 && (
@@ -102,7 +112,9 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "", menuI
                                     <Link
                                       href={subItem.url || "#"}
                                       target={subItem.target || "_self"}
-                                      className={`menu-link-text link ${isMenuActive(subItem) ? "activeMenu" : ""} ${subItem.css_class || ""}`}
+                                      className={`menu-link-text link ${isMenuActive(subItem) ? "activeMenu" : ""} ${
+                                        subItem.css_class || ""
+                                      }`}
                                     >
                                       {subItem.title}
                                     </Link>
@@ -150,7 +162,9 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "", menuI
                         <Link
                           href={subItem.url || "#"}
                           target={subItem.target || "_self"}
-                          className={`menu-link-text link ${isMenuActive(subItem) ? "activeMenu" : ""} ${subItem.css_class || ""}`}
+                          className={`menu-link-text link ${isMenuActive(subItem) ? "activeMenu" : ""} ${
+                            subItem.css_class || ""
+                          }`}
                         >
                           {subItem.title}
                         </Link>
@@ -162,7 +176,9 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "", menuI
                                   <Link
                                     href={subItem2.url || "#"}
                                     target={subItem2.target || "_self"}
-                                    className={`menu-link-text link ${isMenuActive(subItem2) ? "activeMenu" : ""} ${subItem2.css_class || ""}`}
+                                    className={`menu-link-text link ${isMenuActive(subItem2) ? "activeMenu" : ""} ${
+                                      subItem2.css_class || ""
+                                    }`}
                                   >
                                     {subItem2.title}
                                   </Link>

@@ -43,7 +43,31 @@ export const siteConfig = {
     site: {
         name: "Şımart Teknoloji",
         description: "Robot Süpürge ve Akıllı Ev Sistemleri",
-        url: "https://simart.cloud",
+        url: "https://simart.me/",
+        logo: "https://simart.me/uploads/systems/logo.webp",
+        author: "Şımart Teknoloji",
+        keywords:"Şımart Teknoloji Destek, Akıllı Ev Sistemleri Destek, Şımart Ürün Açıklamaları, Şımart Teknoloji Videolar, Şımart Teknik Destek, Akıllı Cihaz Yardım, Şımart Teknoloji Ürün Desteği, Şımart Kullanım Videoları, Şımart Teknoloji Yardım",
+
+        og: {
+            title: "Şımart Teknoloji - Robot Süpürge ve Akıllı Ev Sistemleri",
+            description: "Şımart Teknoloji, robot süpürgeler, akıllı ev sistemleri ve IoT çözümlerinde öncüdür. Ev otomasyonu ve yaşamı kolaylaştıran teknolojilerle hizmetinizdeyiz.",
+            image: "https://simart.me/og.jpg",
+            type: "website",
+            locale: "tr_TR",
+        }, 
+        twitter: {
+            card: "summary_large_image",
+            title: "Şımart Teknoloji - Robot Süpürge ve Akıllı Ev Sistemleri",
+            description: "Şımart Teknoloji, robot süpürgeler, akıllı ev sistemleri ve IoT çözümlerinde öncüdür. Ev otomasyonu ve yaşamı kolaylaştıran teknolojilerle hizmetinizdeyiz.",
+            image: "https://simart.me/og.jpg",
+            site: "@simartteknoloji",
+            creator: "@simartteknoloji",
+        },
+        itemprop:{
+            name: "Şımart Teknoloji - Robot Süpürge ve Akıllı Ev Sistemleri",
+            description: "Şımart Teknoloji, robot süpürgeler, akıllı ev sistemleri ve IoT çözümlerinde öncüdür. Ev otomasyonu ve yaşamı kolaylaştıran teknolojilerle hizmetinizdeyiz.",
+            image: "https://simart.me/uploads/systems/seo.jpg",
+        }
     },
 };
 

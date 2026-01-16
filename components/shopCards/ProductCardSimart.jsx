@@ -2,11 +2,17 @@
 import React from "react";
 import Link from "next/link";
 import { useContextElement } from "@/context/Context";
+import { useCartStore } from "@/stores/cartStore";
 import Button from "@/components/common/Button";
 import ProductImageSwiper from "@/components/common/ProductImageSwiper";
 
 export default function ProductCardSimart({ product }) {
-    const { addToWishlist, isAddedtoWishlist, addProductToCartDirect } = useContextElement();
+    const context = useContextElement();
+    const addToWishlist = context?.addToWishlist || (() => {});
+    const isAddedtoWishlist = context?.isAddedtoWishlist || (() => false);
+    const { addItem, isInCart } = useCartStore();
+    const [isAdding, setIsAdding] = React.useState(false);
+    const [showSuccess, setShowSuccess] = React.useState(false);
 
     // -- Veriler --
     const title = product.name || product.title;
@@ -44,7 +50,7 @@ export default function ProductCardSimart({ product }) {
     };
     const categorySlug = getCategorySlug();
 
-    // -- Orijinal Buton Metin Mantığı --
+    // -- Buton Metin Mantığı --
     const isInStock = product.is_in_stock || false;
     const unlimitedStock = product.unlimited_stock || false;
     const isPreOrder = product.is_pre_order || false;
@@ -53,6 +59,7 @@ export default function ProductCardSimart({ product }) {
     let buttonText = "Sepete Ekle";
     let buttonDisabled = false;
 
+    // Stok durumuna göre buton metni (sepette olsa bile "Sepete Ekle" yazacak)
     if (isInStock) {
         if (unlimitedStock) {
             buttonText = "Sepete Ekle";
@@ -113,12 +120,28 @@ export default function ProductCardSimart({ product }) {
                 <div className="button-row">
                     <div className="flex-grow-1">
                         <Button
-                            onClick={() => addProductToCartDirect(product)}
-                            text={buttonText}
+                            onClick={async () => {
+                                if (isAdding || showSuccess) return;
+                                setIsAdding(true);
+                                try {
+                                    await addItem(product, 1, false);
+                                    // Başarılı olduğunda animasyon göster
+                                    setShowSuccess(true);
+                                    setTimeout(() => {
+                                        setShowSuccess(false);
+                                    }, 2000); // Animasyon 2 saniye sürüyor
+                                } catch (error) {
+                                    console.error("Sepete ekleme hatası:", error);
+                                } finally {
+                                    setIsAdding(false);
+                                }
+                            }}
+                            text={showSuccess ? "Sepete Eklendi" : (isAdding ? "Ekleniyor..." : buttonText)}
                             size="sm"
                             fullWidth={true}
-                            disabled={buttonDisabled}
-                            className="main-cart-btn"
+                            disabled={buttonDisabled || isAdding || showSuccess}
+                            className={`main-cart-btn ${showSuccess ? 'success-animation' : ''}`}
+                            style={{ opacity: 1 }}
                         />
                     </div>
                     <button
@@ -230,6 +253,80 @@ export default function ProductCardSimart({ product }) {
                     /* Tablet ve mobilde soldan, desktop'ta ortadan */
                     text-align: left !important;
                     justify-content: flex-start !important;
+                    transition: all 0.3s ease !important;
+                    position: relative !important;
+                }
+                
+                /* Disabled durumunda soluk kalmasın - inline style'ı override et */
+                :global(.main-cart-btn[style*="opacity"]) {
+                    opacity: 1 !important;
+                }
+                
+                /* Disabled attribute'u varsa da opacity 1 olsun */
+                :global(.main-cart-btn:disabled),
+                :global(.main-cart-btn[disabled]) {
+                    opacity: 1 !important;
+                }
+                
+                /* Başarı animasyonu - Trendyol tarzı: Buton yerinde, yazı alttan çıkıp iniyor */
+                :global(.main-cart-btn.success-animation) {
+                    background: #10b981 !important;
+                    border-color: #10b981 !important;
+                    position: relative !important;
+                    overflow: hidden !important;
+                }
+                
+                :global(.main-cart-btn.success-animation::before) {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    height: 100%;
+                    background: #10b981;
+                    animation: slideUpBorder 2s cubic-bezier(0.4, 0, 0.2, 1);
+                    z-index: 0;
+                }
+                
+                :global(.main-cart-btn.success-animation span) {
+                    color: #fff !important;
+                    position: relative;
+                    z-index: 1;
+                    animation: slideUpDownText 2s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+                
+                @keyframes slideUpBorder {
+                    0% {
+                        transform: translateY(100%);
+                    }
+                    20% {
+                        transform: translateY(0);
+                    }
+                    80% {
+                        transform: translateY(0);
+                    }
+                    100% {
+                        transform: translateY(100%);
+                    }
+                }
+                
+                @keyframes slideUpDownText {
+                    0% {
+                        transform: translateY(100%);
+                        opacity: 0;
+                    }
+                    20% {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                    80% {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translateY(100%);
+                        opacity: 0;
+                    }
                 }
                 :global(.main-cart-btn span) {
                     white-space: nowrap !important;

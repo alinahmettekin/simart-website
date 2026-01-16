@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import axios from "axios";
 import crypto from "crypto";
 
@@ -39,6 +40,20 @@ async function handleRequest(request, params, method) {
             .update(dataToSign)
             .digest("hex");
 
+        // Cookie'leri al ve forward et
+        const cookieStore = await cookies();
+        const cookieHeaders = [];
+        let deviceId = null;
+        
+        cookieStore.getAll().forEach(cookie => {
+            cookieHeaders.push(`${cookie.name}=${cookie.value}`);
+            // DEVICE_ID cookie'sini X-Device-ID header'ı olarak ekle
+            if (cookie.name === 'DEVICE_ID') {
+                deviceId = cookie.value;
+            }
+        });
+        const cookieHeader = cookieHeaders.join('; ');
+
         const response = await axios({
             method,
             url: finalUrl,
@@ -48,13 +63,22 @@ async function handleRequest(request, params, method) {
                 "Content-Type": "application/json",
                 "X-Signature": signature,
                 "X-Timestamp": timestamp.toString(),
+                ...(cookieHeader && { "Cookie": cookieHeader }),
+                ...(deviceId && { "X-Device-ID": deviceId }),
             },
             data: body,
+            withCredentials: true, // Cookie'leri otomatik gönder
         });
 
         return NextResponse.json(response.data, { status: response.status });
     } catch (error) {
-        console.error("Proxy Error:", error.message);
+        console.error("Proxy Error:", {
+            message: error.message,
+            status: error.response?.status,
+            statusText: error.response?.statusText,
+            data: error.response?.data,
+            url: finalUrl,
+        });
         return NextResponse.json(
             error.response?.data || { error: "Internal Server Error" },
             { status: error.response?.status || 500 }

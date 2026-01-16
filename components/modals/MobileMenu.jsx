@@ -1,10 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import LanguageSelect from "../common/LanguageSelect";
-import CurrencySelect from "../common/CurrencySelect";
 import { usePathname } from "next/navigation";
 import apiClient from "@/utils/apiClient";
+import { log } from "@/utils/logger";
 
 export default function MobileMenu({ menuItems: initialMenuItems = [] }) {
   const pathname = usePathname();
@@ -17,9 +16,17 @@ export default function MobileMenu({ menuItems: initialMenuItems = [] }) {
           const response = await apiClient.get("/menus?type=header-menu");
           if (response.data?.status === "success" && Array.isArray(response.data.data?.items)) {
             setMenuItems(response.data.data.items);
+          } else {
+            log("[MobileMenu.jsx] Menu API response invalid:", response?.data);
           }
         } catch (error) {
-          console.error("Failed to fetch menu on client (mobile):", error);
+          log("[MobileMenu.jsx] Failed to fetch menu:", {
+            message: error.message,
+            status: error.response?.status,
+            statusText: error.response?.statusText,
+            url: error.config?.url,
+          });
+          // Hata durumunda menuItems boş kalır, bu yüzden render edilmez
         }
       };
       fetchMenu();
@@ -81,10 +88,7 @@ export default function MobileMenu({ menuItems: initialMenuItems = [] }) {
               </div>
             </>
           ) : (
-            <Link
-              href={item.url || "#"}
-              className={`mb-menu-link ${isMenuActive(item) ? "activeMenu" : ""}`}
-            >
+            <Link href={item.url || "#"} className={`mb-menu-link ${isMenuActive(item) ? "activeMenu" : ""}`}>
               {item.title}
             </Link>
           )}
@@ -95,11 +99,7 @@ export default function MobileMenu({ menuItems: initialMenuItems = [] }) {
 
   return (
     <div className="offcanvas offcanvas-start canvas-mb" id="mobileMenu">
-      <span
-        className="icon-close icon-close-popup"
-        data-bs-dismiss="offcanvas"
-        aria-label="Close"
-      />
+      <span className="icon-close icon-close-popup" data-bs-dismiss="offcanvas" aria-label="Close" />
       <div className="mb-canvas-content">
         <div className="mb-body">
           <ul className="nav-ul-mb" id="wrapper-menu-navigation">
@@ -140,18 +140,6 @@ export default function MobileMenu({ menuItems: initialMenuItems = [] }) {
             <i className="icon icon-account" />
             Login
           </Link>
-          <div className="bottom-bar-language">
-            <div className="tf-currencies">
-              <CurrencySelect />
-            </div>
-            <div className="tf-languages">
-              <LanguageSelect
-                parentClassName={
-                  "image-select center style-default type-languages"
-                }
-              />
-            </div>
-          </div>
         </div>
       </div>
     </div>

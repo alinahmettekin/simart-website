@@ -1,21 +1,70 @@
 "use client";
-import { useContextElement } from "@/context/Context";
+import { useCartStore } from "@/stores/cartStore";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { log } from "@/utils/logger";
+
+const ORDER_NOTE_KEY = 'cart_order_note';
+
 export default function Cart() {
-  const { cartProducts, setCartProducts, totalPrice } = useContextElement();
-  const setQuantity = (id, quantity) => {
-    if (quantity >= 1) {
-      const item = cartProducts.filter((elm) => elm.id == id)[0];
-      const items = [...cartProducts];
-      const itemIndex = items.indexOf(item);
-      item.quantity = quantity;
-      items[itemIndex] = item;
-      setCartProducts(items);
+  const { items, updateQuantity, removeItem } = useCartStore();
+  const [orderNote, setOrderNote] = useState("");
+  
+  // Sayfa yüklendiğinde localStorage'dan sipariş notunu oku
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedNote = localStorage.getItem(ORDER_NOTE_KEY);
+      if (savedNote) {
+        setOrderNote(savedNote);
+        log("[Cart] localStorage'dan sipariş notu yüklendi:", savedNote);
+      } else {
+        log("[Cart] localStorage'da sipariş notu yok, boş başlatılıyor");
+      }
+    }
+  }, []);
+  
+  // Sipariş notu değiştiğinde localStorage'a kaydet
+  const handleOrderNoteChange = (value) => {
+    setOrderNote(value);
+    if (typeof window !== 'undefined') {
+      if (value && value.trim()) {
+        localStorage.setItem(ORDER_NOTE_KEY, value);
+        log("[Cart] Sipariş notu localStorage'a kaydedildi:", value);
+      } else {
+        localStorage.removeItem(ORDER_NOTE_KEY);
+        log("[Cart] Sipariş notu localStorage'dan silindi");
+      }
     }
   };
-  const removeItem = (id) => {
-    setCartProducts((pre) => [...pre.filter((elm) => elm.id != id)]);
+  
+  // API'den gelen totals.total kullan, yoksa local hesapla (fallback)
+  const totalPrice = useCartStore((state) => {
+    if (state.totals && state.totals.total !== null && state.totals.total !== undefined) {
+      return state.totals.total;
+    }
+    return state.items.reduce((total, item) => {
+      const itemPrice = item.discount_price || item.price || 0;
+      return total + (itemPrice * item.quantity);
+    }, 0);
+  });
+
+  const setQuantity = async (id, quantity) => {
+    if (quantity >= 1) {
+      try {
+        await updateQuantity(id, quantity);
+      } catch (error) {
+        console.error("Miktar güncelleme hatası:", error);
+      }
+    }
+  };
+
+  const handleRemoveItem = async (id) => {
+    try {
+      await removeItem(id);
+    } catch (error) {
+      console.error("Ürün kaldırma hatası:", error);
+    }
   };
   return (
     <section className="flat-spacing-11">
@@ -62,110 +111,119 @@ export default function Cart() {
                   </tr>
                 </thead>
                 <tbody>
-                  {cartProducts.map((elm, i) => (
-                    <tr key={i} className="tf-cart-item file-delete">
-                      <td className="tf-cart-item_product">
-                        <Link
-                          href={`/product-detail/${elm.id}`}
-                          className="img-box"
-                        >
-                          <Image
-                            alt="img-product"
-                            src={elm.imgSrc}
-                            width={668}
-                            height={932}
-                          />
-                        </Link>
-                        <div className="cart-info">
+                  {items.map((item, i) => {
+                    const itemPrice = item.discount_price || item.price || 0;
+                    const itemTotal = itemPrice * item.quantity;
+                    // Kategori slug'ını al (fallback ile)
+                    const categorySlug = item.product?.categories?.[0]?.slug || 
+                                       item.product?.primary_category?.slug || 
+                                       "urunler";
+                    
+                    return (
+                      <tr key={i} className="tf-cart-item file-delete">
+                        <td className="tf-cart-item_product">
                           <Link
-                            href={`/product-detail/${elm.id}`}
-                            className="cart-title link"
+                            href={`/magaza/${categorySlug}/${item.slug}`}
+                            className="img-box"
                           >
-                            {elm.title}
-                          </Link>
-                          <div className="cart-meta-variant">White / M</div>
-                          <span
-                            className="remove-cart link remove"
-                            onClick={() => removeItem(elm.id)}
-                          >
-                            Remove
-                          </span>
-                        </div>
-                      </td>
-                      <td
-                        className="tf-cart-item_price"
-                        cart-data-title="Price"
-                      >
-                        <div className="cart-price">
-                          ${elm.price.toFixed(2)}
-                        </div>
-                      </td>
-                      <td
-                        className="tf-cart-item_quantity"
-                        cart-data-title="Quantity"
-                      >
-                        <div className="cart-quantity">
-                          <div className="wg-quantity">
-                            <span
-                              className="btn-quantity minus-btn"
-                              onClick={() =>
-                                setQuantity(elm.id, elm.quantity - 1)
-                              }
-                            >
-                              <svg
-                                className="d-inline-block"
-                                width={9}
-                                height={1}
-                                viewBox="0 0 9 1"
-                                fill="currentColor"
-                              >
-                                <path d="M9 1H5.14286H3.85714H0V1.50201e-05H3.85714L5.14286 0L9 1.50201e-05V1Z" />
-                              </svg>
-                            </span>
-                            <input
-                              type="text"
-                              name="number"
-                              value={elm.quantity}
-                              min={1}
-                              onChange={(e) =>
-                                setQuantity(elm.id, e.target.value / 1)
-                              }
+                            <Image
+                              alt={item.name || "img-product"}
+                              src={item.image || "/images/default-product.jpg"}
+                              width={668}
+                              height={932}
                             />
-                            <span
-                              className="btn-quantity plus-btn"
-                              onClick={() =>
-                                setQuantity(elm.id, elm.quantity + 1)
-                              }
+                          </Link>
+                          <div className="cart-info">
+                            <Link
+                              href={`/magaza/${categorySlug}/${item.slug}`}
+                              className="cart-title link"
                             >
-                              <svg
-                                className="d-inline-block"
-                                width={9}
-                                height={9}
-                                viewBox="0 0 9 9"
-                                fill="currentColor"
-                              >
-                                <path d="M9 5.14286H5.14286V9H3.85714V5.14286H0V3.85714H3.85714V0H5.14286V3.85714H9V5.14286Z" />
-                              </svg>
+                              {item.name}
+                            </Link>
+                            <div className="cart-meta-variant"></div>
+                            <span
+                              className="remove-cart link remove"
+                              onClick={() => handleRemoveItem(item.id)}
+                            >
+                              Kaldır
                             </span>
                           </div>
-                        </div>
-                      </td>
-                      <td
-                        className="tf-cart-item_total"
-                        cart-data-title="Total"
-                      >
-                        <div
-                          className="cart-total"
-                          style={{ minWidth: "60px" }}
+                        </td>
+                        <td
+                          className="tf-cart-item_price"
+                          cart-data-title="Price"
                         >
-                          ${(elm.price * elm.quantity).toFixed(2)}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                          <div className="cart-price">
+                            ₺{itemPrice.toLocaleString('tr-TR')}
+                          </div>
+                        </td>
+                        <td
+                          className="tf-cart-item_quantity"
+                          cart-data-title="Quantity"
+                        >
+                          <div className="cart-quantity">
+                            <div className="wg-quantity">
+                              <span
+                                className="btn-quantity minus-btn"
+                                onClick={() =>
+                                  setQuantity(item.id, item.quantity - 1)
+                                }
+                              >
+                                <svg
+                                  className="d-inline-block"
+                                  width={9}
+                                  height={1}
+                                  viewBox="0 0 9 1"
+                                  fill="currentColor"
+                                >
+                                  <path d="M9 1H5.14286H3.85714H0V1.50201e-05H3.85714L5.14286 0L9 1.50201e-05V1Z" />
+                                </svg>
+                              </span>
+                              <input
+                                type="text"
+                                name="number"
+                                value={item.quantity}
+                                min={1}
+                                onChange={(e) =>
+                                  setQuantity(item.id, parseInt(e.target.value) || 1)
+                                }
+                              />
+                              <span
+                                className="btn-quantity plus-btn"
+                                onClick={() =>
+                                  setQuantity(item.id, item.quantity + 1)
+                                }
+                              >
+                                <svg
+                                  className="d-inline-block"
+                                  width={9}
+                                  height={9}
+                                  viewBox="0 0 9 9"
+                                  fill="currentColor"
+                                >
+                                  <path d="M9 5.14286H5.14286V9H3.85714V5.14286H0V3.85714H3.85714V0H5.14286V3.85714H9V5.14286Z" />
+                                </svg>
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+                        <td
+                          className="tf-cart-item_total"
+                          cart-data-title="Total"
+                        >
+                          <div
+                            className="cart-total"
+                            style={{ minWidth: "60px" }}
+                          >
+                            ₺{itemTotal.toLocaleString('tr-TR')}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
-              {!cartProducts.length && (
+              {!items.length && (
                 <>
                   <div className="row align-items-center mb-5">
                     <div className="col-6 fs-18">Your shop cart is empty</div>
@@ -186,8 +244,9 @@ export default function Cart() {
                 <textarea
                   name="note"
                   id="cart-note"
-                  placeholder="How can we help you?"
-                  defaultValue={""}
+                  placeholder="Nasıl yardımcı olabiliriz?"
+                  value={orderNote || ""}
+                  onChange={(e) => handleOrderNoteChange(e.target.value)}
                 />
               </div>
             </form>
@@ -277,7 +336,7 @@ export default function Cart() {
                 <div className="tf-cart-totals-discounts">
                   <h3>Toplam</h3>
                   <span className="total-value">
-                    {totalPrice.toFixed(2)} ₺
+                    ₺{totalPrice.toLocaleString('tr-TR')}
                   </span>
                 </div>
                 

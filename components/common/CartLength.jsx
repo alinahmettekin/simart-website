@@ -1,8 +1,11 @@
 "use client";
 
-import { useContextElement } from "@/context/Context";
+import { useCartStore } from "@/stores/cartStore";
 
 export default function CartLength() {
-  const { cartProducts } = useContextElement();
-  return <>{cartProducts.length}</>;
+  // Selector kullanarak sadece items değiştiğinde re-render olur
+  const totalItems = useCartStore((state) => {
+    return state.items.reduce((total, item) => total + item.quantity, 0);
+  });
+  return <>{totalItems}</>;
 }

@@ -3,6 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function BlogGrid({ blogs = [] }) {
+  // API'den veri gelmezse hiçbir şey gösterme
+  if (!blogs || blogs.length === 0) {
+    return null;
+  }
+
   return (
     <div className="blog-grid-main">
       <div className="container">

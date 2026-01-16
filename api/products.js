@@ -1,5 +1,5 @@
 import { serverFetch } from "@/utils/serverFetch";
-import { log} from "@/utils/logger";
+import { log } from "@/utils/logger";
 import { ProductModel } from "@/models/Product";
 
 /**

@@ -4,11 +4,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Link from "next/link";
 import Image from "next/image";
 import { Navigation, Pagination } from "swiper/modules";
-import { blogArticles3 as staticBlogs } from "@/data/blogs";
 
 export default function BlogsClient({ blogs = [] }) {
-    // Veri yoksa statik verileri kullan
-    const displayBlogs = blogs.length > 0 ? blogs : staticBlogs;
+    // API'den veri gelmezse hiçbir şey gösterme
+    if (!blogs || blogs.length === 0) {
+        return null;
+    }
+
+    const displayBlogs = blogs;
 
     return (
         <section className="flat-spacing-14">

@@ -1,5 +1,4 @@
 import Footer from "@/components/footers/Footer";
-import Header from "@/components/headers/Header";
 import ShopSidebarleft from "@/components/shop/ShopSidebarleft";
 import React from "react";
 
@@ -15,9 +14,7 @@ export default function page() {
           <div className="row">
             <div className="col-12">
               <div className="heading text-center">New Arrival</div>
-              <p className="text-center text-2 text_black-2 mt_5">
-                Shop through our latest selection of Fashion
-              </p>
+              <p className="text-center text-2 text_black-2 mt_5">Shop through our latest selection of Fashion</p>
             </div>
           </div>
         </div>

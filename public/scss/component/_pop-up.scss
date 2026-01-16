@@ -902,43 +902,60 @@
     }
   }
   .tf-minicart-recommendations {
-    margin: 15px 36px;
-    padding: 18px;
-    box-shadow: 0 0.4rem 1.6rem #00000014;
+    margin: 12px 24px;
+    padding: 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    background: transparent;
     .tf-minicart-recommendations-heading {
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       .tf-minicart-recommendations-title {
         font-size: 16px;
         font-weight: 600;
-        line-height: 19px;
+        line-height: 1.4;
+        color: var(--text);
+        opacity: 0.7;
       }
       .sw-dots {
         width: unset;
+        display: none; // Pagination dots'u gizle
       }
     }
   }
   .tf-minicart-recommendations-item {
     display: flex;
     align-items: center;
+    gap: 12px;
     .tf-minicart-recommendations-item-image a {
-      width: 80px;
-      height: 110px;
-      margin-right: 18px;
+      width: 60px;
+      height: 80px;
+      margin-right: 0;
+      border-radius: 4px;
+      overflow: hidden;
     }
     .tf-minicart-recommendations-item-infos {
+      flex: 1;
+      min-width: 0;
       a {
         text-overflow: ellipsis;
         overflow: hidden;
-        font-size: 16px;
+        font-size: 14px;
         white-space: nowrap;
+        color: var(--text);
+        font-weight: 400;
+        display: block;
+        &:hover {
+          color: var(--primary);
+        }
       }
       .price {
         margin-top: 4px;
-        line-height: 14px;
+        line-height: 1.2;
         font-weight: 600;
+        font-size: 14px;
+        color: var(--main);
       }
     }
     .tf-minicart-recommendations-item-quickview .quickview {
@@ -986,15 +1003,29 @@
     padding: 20px 36px 30px;
     .tf-cart-totals-discounts {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      .tf-cart-total {
-        font-size: 20px;
-      }
-      .tf-totals-total-value {
-        font-size: 20px;
-        line-height: 32px;
-        margin-left: 15px;
+      flex-direction: column;
+      gap: 8px;
+      .tf-cart-totals-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .tf-cart-total-label {
+          color: var(--text);
+        }
+        .tf-cart-total-value {
+          color: var(--text);
+        }
+        &.tf-cart-totals-item-small {
+          font-size: 10px; // Toplam'ın yarısı (20px / 2)
+          line-height: 1.4;
+        }
+        &.tf-cart-totals-item-total {
+          font-size: 20px; // Odak burada
+          line-height: 1.5;
+          margin-top: 4px;
+          padding-top: 8px;
+          border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
       }
     }
     .tf-cart-tax {
